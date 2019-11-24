@@ -10,7 +10,6 @@ local Data = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):Wa
 local Gui = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Gui")
 
 local NexusButton = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"))
-local RectPoint4 = require(Data:WaitForChild("RectPoint4"))
 
 
 
