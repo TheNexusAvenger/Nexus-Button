@@ -1,0 +1,14 @@
+{
+	"name": "Repository",
+	"servePort": 8000,
+	"partitions": {
+ 		"src": {
+			"path": "src",
+			"target": "ReplicatedStorage.NexusButton"
+		},
+		"test": {
+			"path": "test",
+			"target": "ReplicatedStorage.NexusButtonTests"
+		}
+	}
+}

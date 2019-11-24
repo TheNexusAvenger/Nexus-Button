@@ -1,0 +1,3 @@
+[submodule "src/NexusInstance"]
+	path = src/NexusInstance
+	url = http://github.com/TheNexusAvenger/Nexus-Instance.git
