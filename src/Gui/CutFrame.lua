@@ -70,16 +70,16 @@ function CutFrame:__InitializeFrames()
 	local TopRightTriangle = Instance.new("ImageLabel")
 	TopRightTriangle.BackgroundTransparency = 1
 	TopRightTriangle.Image = TRIANGLE_TEXTURES
-	TopRightTriangle.ImageRectSize = BOTTOM_LEFT_TRIANGLE_OFFSET
-	TopRightTriangle.ImageRectOffset = TOP_LEFT_TRIANGLE_OFFSET
+	TopRightTriangle.ImageRectSize = TRIANGLE_TEXTURE_SIZE
+	TopRightTriangle.ImageRectOffset = TOP_RIGHT_TRIANGLE_OFFSET
 	self.TopRightTriangle = TopRightTriangle
 	self:LockProperty("TopRightTriangle")
 	
 	local BottomLeftTriangle = Instance.new("ImageLabel")
 	BottomLeftTriangle.BackgroundTransparency = 1
 	BottomLeftTriangle.Image = TRIANGLE_TEXTURES
-	BottomLeftTriangle.ImageRectSize = TOP_RIGHT_TRIANGLE_OFFSET
-	BottomLeftTriangle.ImageRectOffset = TOP_LEFT_TRIANGLE_OFFSET
+	BottomLeftTriangle.ImageRectSize = TRIANGLE_TEXTURE_SIZE
+	BottomLeftTriangle.ImageRectOffset = BOTTOM_LEFT_TRIANGLE_OFFSET
 	self.BottomLeftTriangle = BottomLeftTriangle
 	self:LockProperty("BottomLeftTriangle")
 	
