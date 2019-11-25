@@ -119,6 +119,12 @@ NexusUnitTesting:RegisterUnitTest("Colors",function(UnitTest)
 	CuT:__UpdateColors()
 	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
 	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	CuT.AutoButtonColor = false
+	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
+	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	CuT.AutoButtonColor = true
+	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
+	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
 	CuT.__Hovered = false
 	CuT:__UpdateColors()
 	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")

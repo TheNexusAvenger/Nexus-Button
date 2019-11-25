@@ -181,6 +181,9 @@ function NexusButton:__new()
 	--Add custom replication overrides.
 	CustomReplication["__Hovered"] = function() end
 	CustomReplication["__Clicked"] = function() end
+	CustomReplication["AutoButtonColor"] = function()
+		self:__UpdateColors()
+	end
 	CustomReplication["BackgroundColor3"] = function()
 		self:__UpdateColors()
 	end
@@ -224,6 +227,7 @@ function NexusButton:__new()
 	self.BorderSizeScale = 0.2
 	self.BackgroundTransparency = 0
 	self.BorderTransparency = 0
+	self.AutoButtonColor = true
 end
 
 --[[
@@ -269,10 +273,12 @@ function NexusButton:__UpdateColors()
 	local ColorMultiplier = 1
 	
 	--Determine the color multiplier.
-	if self.__Clicked then
-		ColorMultiplier = CLICK_COLOR_MULTIPLIER
-	elseif self.__Hovered then
-		ColorMultiplier = HOVER_COLOR_MULTIPLIER
+	if self.AutoButtonColor then
+		if self.__Clicked then
+			ColorMultiplier = CLICK_COLOR_MULTIPLIER
+		elseif self.__Hovered then
+			ColorMultiplier = HOVER_COLOR_MULTIPLIER
+		end
 	end
 	
 	--Add the section for the gamepad icon if it is visible.
