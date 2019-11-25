@@ -186,7 +186,7 @@ adorned frames for the current cuts.
 --]]
 function CutFrame:__UpdateFrames()
 	--Get the base lengths and points.
-	local SizeX,SizeY = self.AdornFrame.AbsoluteSize.X,self.AdornFrame.AbsoluteSize.Y
+	local SizeX,SizeY = math.floor(self.AdornFrame.AbsoluteSize.X + 0.5),math.floor(self.AdornFrame.AbsoluteSize.Y + 0.5)
 	local TopPoint1,TopPoint2 = self.CutPoints.Top:GetOrderedPoints(SizeX)
 	local BottomPoint1,BottomPoint2 = self.CutPoints.Bottom:GetOrderedPoints(SizeX)
 	local LeftPoint1,LeftPoint2 = self.CutPoints.Left:GetOrderedPoints(SizeY)
