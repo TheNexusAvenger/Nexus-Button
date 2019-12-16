@@ -20,7 +20,7 @@ local CONTROLLER_SECTION_COLOR = Color3.new(50/255,50/255,50/255)
 local ColoredCutFrame = require(script:WaitForChild("Gui"):WaitForChild("ColoredCutFrame"))
 local ControllerIcon = require(script:WaitForChild("Gui"):WaitForChild("ControllerIcon"))
 local BaseButton = require(script:WaitForChild("Gui"):WaitForChild("BaseButton"))
-local NexusInstance = require(script:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(script:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 
 local NexusButton = NexusInstance:Extend()
 NexusButton:SetClassName("NexusButton")

@@ -8,7 +8,7 @@ This class is mutable.
 --]]
 
 local RootModule = script.Parent.Parent
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 
 local RectPoint8 = NexusInstance:Extend()
 RectPoint8:SetClassName("RectPoint8")

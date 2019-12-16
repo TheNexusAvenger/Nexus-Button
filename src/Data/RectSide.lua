@@ -12,7 +12,7 @@ This class is immutable.
 --]]
 
 local RootModule = script.Parent.Parent
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 
 local RectSide = NexusInstance:Extend()
 RectSide:SetClassName("RectSide")

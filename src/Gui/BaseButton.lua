@@ -11,8 +11,8 @@ local TRIGGER_PRESS_THRESHOLD = 0.9
 
 local RootModule = script.Parent.Parent
 
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
-local NexusEventCreator = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("Event"):WaitForChild("NexusEventCreator"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
+local NexusEventCreator = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("Event"):WaitForChild("NexusEventCreator"))
 
 local BaseButton = NexusInstance:Extend()
 BaseButton:SetClassName("BaseButton")

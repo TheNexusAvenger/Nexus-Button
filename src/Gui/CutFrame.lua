@@ -18,7 +18,7 @@ local BOTTOM_RIGHT_TRIANGLE_OFFSET = Vector2.new(512,512)
 local RootModule = script.Parent.Parent
 local Data = RootModule:WaitForChild("Data")
 
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 local RectSide = require(Data:WaitForChild("RectSide"))
 local RectPoint8 = require(Data:WaitForChild("RectPoint8"))
 

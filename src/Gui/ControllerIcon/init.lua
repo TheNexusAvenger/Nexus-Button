@@ -18,7 +18,7 @@ local CUSTOM_MULTIPLIERS = {
 local RootModule = script.Parent.Parent
 
 local ControllerIconCreator = require(script:WaitForChild("ControllerIconCreator"))
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 
 local ControllerIcon = NexusInstance:Extend()
 ControllerIcon:SetClassName("ControllerIcon")

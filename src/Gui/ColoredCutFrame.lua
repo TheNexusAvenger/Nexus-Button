@@ -10,7 +10,7 @@ local RootModule = script.Parent.Parent
 local Data = RootModule:WaitForChild("Data")
 local Gui = RootModule:WaitForChild("Gui")
 
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 local RectSide = require(Data:WaitForChild("RectSide"))
 local RectPoint8 = require(Data:WaitForChild("RectPoint8"))
 local CutFrame = require(Gui:WaitForChild("CutFrame"))

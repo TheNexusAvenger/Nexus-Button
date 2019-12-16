@@ -12,7 +12,7 @@ local BORDER_COLOR_OFFSET = Color3.new(-30/255,-30/255,-30/255)
 
 local RootModule = script.Parent.Parent
 
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("src"):WaitForChild("NexusInstance"))
+local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 local NexusButton = require(RootModule)
 
 local ButtonFactory = NexusInstance:Extend()
