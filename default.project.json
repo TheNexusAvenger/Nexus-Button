@@ -1,6 +1,5 @@
 {
 	"name": "Repository",
-	"servePort": 8000,
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
