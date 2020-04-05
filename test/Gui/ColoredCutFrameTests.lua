@@ -131,13 +131,12 @@ NexusUnitTesting:RegisterUnitTest("BackgroundColor3",function(UnitTest)
 	CuT.BackgroundColor3 = Color3.new(1,0,0)
 	
 	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			if SubFrame:IsA("ImageLabel") then
-				UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(1,0,0),"Color is not set.")
-			else
-				UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(1,0,0),"Color is not set.")
-			end
+	for _,SubFrame in pairs(Frame:GetChildren()) do
+		UnitTest:AssertNil(SubFrame:FindFirstChildOfClass("UIGradient"),"Gradient was added.")
+		if SubFrame:IsA("ImageLabel") then
+			UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(1,0,0),"Color is not set.")
+		else
+			UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(1,0,0),"Color is not set.")
 		end
 	end
 end)
@@ -159,13 +158,12 @@ NexusUnitTesting:RegisterUnitTest("BackgroundColor3AfterCutting",function(UnitTe
 	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
 	
 	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			if SubFrame:IsA("ImageLabel") then
-				UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(1,0,0),"Color is not set.")
-			else
-				UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(1,0,0),"Color is not set.")
-			end
+	for _,SubFrame in pairs(Frame:GetChildren()) do
+		UnitTest:AssertNil(SubFrame:FindFirstChildOfClass("UIGradient"),"Gradient was added.")
+		if SubFrame:IsA("ImageLabel") then
+			UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(1,0,0),"Color is not set.")
+		else
+			UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(1,0,0),"Color is not set.")
 		end
 	end
 end)
@@ -177,193 +175,85 @@ NexusUnitTesting:RegisterUnitTest("BackgroundColor3ColorSequence",function(UnitT
 	local Frame = Instance.new("Frame")
 	Frame.BackgroundTransparency = 1
 	Frame.Size = UDim2.new(0,100,0,100)
-	
+
 	--Create the ColoredCutFrame class.
 	local CuT = ColoredCutFrame.new(Frame)
 	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
+	CuT:CutCorner("Top","Right",UDim2.new(0.3,0,0.2,0))
 	CuT.BackgroundColor3 = ColorSequence.new({
 		ColorSequenceKeypoint.new(0,Color3.new(1,0,0)),
 		ColorSequenceKeypoint.new(0.4,Color3.new(0,1,0)),
 		ColorSequenceKeypoint.new(1,Color3.new(0,0,1)),
 	})
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
+	CuT:CutCorner("Bottom","Left",UDim2.new(0.5,0,0.3,0))
 	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
 	
 	--Run the assertions.
-	UnitTest:AssertEquals(#Frame:GetChildren(),2,"Wrong amount of adorn frames made.")
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		if SubAdornFrame.AbsolutePosition.X == 0 then
-			UnitTest:AssertEquals(SubAdornFrame.AbsoluteSize.X,40,"Clips frame size is incorrect.")
-			
-			for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-				if SubFrame:IsA("ImageLabel") then
-					UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(1,0,0),"Color is not set.")
-				else
-					UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(1,0,0),"Color is not set.")
-				end
-			end
-		elseif SubAdornFrame.AbsolutePosition.X == 40 then
-			UnitTest:AssertEquals(SubAdornFrame.AbsoluteSize.X,60,"Clips frame size is incorrect.")
-			
-			for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-				if SubFrame:IsA("ImageLabel") then
-					UnitTest:AssertEquals(SubFrame.ImageColor3,Color3.new(0,1,0),"Color is not set.")
-				else
-					UnitTest:AssertEquals(SubFrame.BackgroundColor3,Color3.new(0,1,0),"Color is not set.")
-				end
-			end
-		else
-			UnitTest:Fail("Incorrect clips frame position: "..tostring(SubAdornFrame.AbsolutePosition.X))
-		end
-	end
-end)
-
---[[
-Tests setting the BackgroundColor3 with ColorSequence with duplicate colors.
---]]
-NexusUnitTesting:RegisterUnitTest("BackgroundColor3ColorSequenceEfficiency",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
-	CuT.BackgroundColor3 = ColorSequence.new({
-		ColorSequenceKeypoint.new(0,Color3.new(1,0,0)),
-		ColorSequenceKeypoint.new(0.2,Color3.new(1,0,0)),
-		ColorSequenceKeypoint.new(0.4,Color3.new(1,0,0)),
-		ColorSequenceKeypoint.new(0.6,Color3.new(1,0,0)),
-		ColorSequenceKeypoint.new(0.8,Color3.new(1,0,0)),
-		ColorSequenceKeypoint.new(1,Color3.new(0,0,1)),
-	})
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
-	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
-	
-	--Run the assertions.
-	UnitTest:AssertEquals(#Frame:GetChildren(),1,"Wrong amount of adorn frames made.")
-end)
-
---[[
-Tests setting the BackgroundTransparency.
---]]
-NexusUnitTesting:RegisterUnitTest("BackgroundTransparency",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
-	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
-	CuT.BackgroundTransparency = 0.5
-	
-	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			if SubFrame:IsA("ImageLabel") then
-				UnitTest:AssertEquals(SubFrame.ImageTransparency,0.5,"Transparency is not set.")
-			else
-				UnitTest:AssertEquals(SubFrame.BackgroundTransparency,0.5,"Transparency is not set.")
-			end
-		end
-	end
-end)
-
---[[
-Tests setting the BackgroundTransparency after cutting.
---]]
-NexusUnitTesting:RegisterUnitTest("BackgroundTransparencyAfterCutting",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
-	CuT.BackgroundTransparency = 0.5
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
-	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
-	
-	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			if SubFrame:IsA("ImageLabel") then
-				UnitTest:AssertEquals(SubFrame.ImageTransparency,0.5,"Transparency is not set.")
-			else
-				UnitTest:AssertEquals(SubFrame.BackgroundTransparency,0.5,"Transparency is not set.")
-			end
-		end
-	end
-end)
-
---[[
-Tests setting the ZIndex.
---]]
-NexusUnitTesting:RegisterUnitTest("ZIndex",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
-	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
-	CuT.ZIndex = 3
-	
-	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			UnitTest:AssertEquals(SubFrame.ZIndex,3,"ZIndex is not set.")
-		end
-	end
-end)
-
---[[
-Tests setting the ZIndex after cutting.
---]]
-NexusUnitTesting:RegisterUnitTest("ZIndexAfterCutting",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
-	CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
-	CuT.ZIndex = 3
-	CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
-	CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
-	
-	--Run the assertions.
-	for _,SubAdornFrame in pairs(Frame:GetChildren()) do
-		for _,SubFrame in pairs(SubAdornFrame:GetChildren()[1]:GetChildren()[1]:GetChildren()) do
-			UnitTest:AssertEquals(SubFrame.ZIndex,3,"ZIndex is not set.")
-		end
-	end
-end)
-
---[[
-Tests the Destroy function.
---]]
-NexusUnitTesting:RegisterUnitTest("Destroy",function(UnitTest)
-	local Frame = Instance.new("Frame")
-	Frame.BackgroundTransparency = 1
-	Frame.Size = UDim2.new(0,100,0,100)
-	
-	--Create the ColoredCutFrame class.
-	local CuT = ColoredCutFrame.new(Frame)
-	CuT:Destroy()
-	
-	--Run the assertions.
-	UnitTest:AssertEquals(#Frame:GetChildren(),0,"Frames not destroyed.")
+	UnitTest:AssertEquals(#CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints,2)
+	UnitTest:AssertEquals(CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertEquals(CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,1)
+	UnitTest:AssertEquals(CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(#CuT.TopRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints,2)
+	UnitTest:AssertEquals(CuT.TopRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertEquals(CuT.TopRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,1)
+	UnitTest:AssertEquals(CuT.TopRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.TopRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints,4)
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertClose(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,0.8,0.01)
+	UnitTest:AssertClose(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Time,0.8,0.01)
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Time,1)
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.BottomLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.BottomRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints,2)
+	UnitTest:AssertEquals(CuT.BottomRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertEquals(CuT.BottomRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,1)
+	UnitTest:AssertEquals(CuT.BottomRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.BottomRightTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints,4)
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertClose(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,0.5,0.01)
+	UnitTest:AssertClose(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Time,0.5,0.01)
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Time,1)
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[1]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints,4)
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertClose(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,0.4/0.7,0.01)
+	UnitTest:AssertClose(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Time,0.4/0.7,0.01)
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Time,1)
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[2]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints,4)
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertClose(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,0.4,0.01)
+	UnitTest:AssertClose(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Time,0.4,0.01)
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Time,1)
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[3]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints,4)
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertClose(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,0.4/0.6,0.01)
+	UnitTest:AssertClose(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Time,0.4/0.6,0.01)
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Time,1)
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(1,0,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[3].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[4]:FindFirstChildOfClass("UIGradient").Color.Keypoints[4].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(#CuT.RectangleFrames[5]:FindFirstChildOfClass("UIGradient").Color.Keypoints,2)
+	UnitTest:AssertEquals(CuT.RectangleFrames[5]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Time,0)
+	UnitTest:AssertEquals(CuT.RectangleFrames[5]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Time,1)
+	UnitTest:AssertEquals(CuT.RectangleFrames[5]:FindFirstChildOfClass("UIGradient").Color.Keypoints[1].Value,Color3.new(0,1,0))
+	UnitTest:AssertEquals(CuT.RectangleFrames[5]:FindFirstChildOfClass("UIGradient").Color.Keypoints[2].Value,Color3.new(0,1,0))
 end)
 
 

@@ -10,12 +10,11 @@ local RootModule = script.Parent.Parent
 local Data = RootModule:WaitForChild("Data")
 local Gui = RootModule:WaitForChild("Gui")
 
-local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
 local RectSide = require(Data:WaitForChild("RectSide"))
 local RectPoint8 = require(Data:WaitForChild("RectPoint8"))
 local CutFrame = require(Gui:WaitForChild("CutFrame"))
 
-local ColoredCutFrame = NexusInstance:Extend()
+local ColoredCutFrame = CutFrame:Extend()
 ColoredCutFrame:SetClassName("ColoredCutFrame")
 
 
@@ -25,85 +24,70 @@ The constructor fo the colored cut frame. Requires
 an adorn frame.
 --]]
 function ColoredCutFrame:__new(AdornFrame)
-	self:InitializeSuper()
+	self:InitializeSuper(AdornFrame)
 	
 	--Set up the base properties.
 	self.BackgroundColor3 = Color3.new(1,1,1)
 	self.BackgroundTransparency = 0
-	
-	--Set up the "cut points".
-	local DefaultSide = RectSide.new(UDim.new(0,0),UDim.new(0,0))
-	self.CutPoints = RectPoint8.new(DefaultSide,DefaultSide,DefaultSide,DefaultSide)
-	
-	--Set up the adorn frames.
-	self.AdornFrame = AdornFrame
-	self:LockProperty("AdornFrame")
-	
-	--Set up the frames.
-	self.CutFrames = {}
-	self:LockProperty("CutFrames")
-	self:__InitializeEvents()
-	self:__UpdateFrames()
-	self:__CutPointsUpdated()
-	
-	--Set up automatic cutting.
-	self:__InitializeCutting()
 end
 
 --[[
-Initializes automatic cutting. This is done when the
-size constraint isn't RelativeXY.
+Removes a gradient from the frame.
 --]]
-function ColoredCutFrame:__InitializeCutting()
-	CutFrame.__InitializeCutting(self)
-end
-
---[[
-Sets up the events.
---]]
-function ColoredCutFrame:__InitializeEvents()
-	local Events = {}
-	self.__Events = {}
-
-	table.insert(Events,self:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
-		--Optimize the BackgroundColor3.
-		if typeof(self.BackgroundColor3) == "ColorSequence" then
-			self.BackgroundColor3 = self:OptimizeColorSequence(self.BackgroundColor3)
-		end
-		
-		--Update the frames.
-		self:__UpdateFrames()
-	end))
-	table.insert(Events,self:GetPropertyChangedSignal("BackgroundTransparency"):Connect(function()
-		self:__UpdateVisibleFrames()
-	end))
-	table.insert(Events,self:GetPropertyChangedSignal("ZIndex"):Connect(function()
-		self:__UpdateVisibleFrames()
-	end))
-	table.insert(Events,self.AdornFrame:GetPropertyChangedSignal("Size"):Connect(function()
-		self:__UpdateFrames()
-	end))
-	table.insert(Events,self.AdornFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		self:__UpdateFrames()
-	end))
-	table.insert(Events,self:GetPropertyChangedSignal("CutPoints"):Connect(function()
-		self:__CutPointsUpdated()
-	end))
-end
-
---[[
-Invoked the the CutPoints is updated.
---]]
-function ColoredCutFrame:__CutPointsUpdated()
-	table.insert(self.__Events,self.CutPoints.Changed:Connect(function()
-		for _,Frame in pairs(self.CutFrames) do
-			Frame[3].CutPoints = self.CutPoints
-		end
-	end))
-	
-	for _,Frame in pairs(self.CutFrames) do
-		Frame[3].CutPoints = self.CutPoints
+function ColoredCutFrame:__RemoveGradient(Frame)
+	--Remove the UI gradient.
+	local UIGradient = Frame:FindFirstChildOfClass("UIGradient")
+	if UIGradient then
+		UIGradient:Destroy()
 	end
+end
+
+--[[
+Sets the gradient of a frame.
+--]]
+function ColoredCutFrame:__SetGradient(Frame,Start,End)
+	--Return if the start and end are the same.
+	if Start == End then
+		return
+	end
+
+	--Add the UI gradient.
+	local UIGradient = Frame:FindFirstChildOfClass("UIGradient")
+	if not UIGradient then
+		UIGradient = Instance.new("UIGradient")
+		UIGradient.Parent = Frame
+	end
+
+	--Create the keypoints.
+	local KeypointsMap = {}
+	local Keypoints = {}
+	local ColorKeypoints = self.BackgroundColor3.Keypoints
+	for i = 1,#ColorKeypoints - 1 do
+		local Keypoint = ColorKeypoints[i]
+		local NextKeypoint = ColorKeypoints[i + 1]
+
+		--Convert the time.
+		local NewTimeUnclamped = (Keypoint.Time - Start)/(End - Start)
+		local NewTime = math.clamp(NewTimeUnclamped,0,1)
+		local NextNewTimeUnclamped = (NextKeypoint.Time - Start)/(End - Start)
+		local NextNewTime = math.clamp(NextNewTimeUnclamped,0,1)
+
+		--Add the keypoint.
+		if NewTime ~= NextNewTime then
+			local NewKeypoint = ColorSequenceKeypoint.new(NewTime,Keypoint.Value)
+
+			if NextNewTime == 1 then
+				table.insert(Keypoints,NewKeypoint)
+				table.insert(Keypoints,ColorSequenceKeypoint.new(NextNewTime,Keypoint.Value))
+			else
+				table.insert(Keypoints,NewKeypoint)
+				table.insert(Keypoints,ColorSequenceKeypoint.new(NextNewTime - 0.0001,Keypoint.Value))
+			end
+		end
+	end
+
+	--Set the colors.
+	UIGradient.Color = ColorSequence.new(Keypoints)
 end
 
 --[[
@@ -111,145 +95,27 @@ Updates the color and transparency of the
 frames. Should be run after ColoredCutFrame:__UpdateFrames().
 --]]
 function ColoredCutFrame:__UpdateVisibleFrames()
-	local Color = self.BackgroundColor3
+	self.super:__UpdateVisibleFrames()
 	
-	--Set the colors nad background transparencies.
-	if typeof(Color) == "ColorSequence" then
-		local Keypoints = Color.Keypoints
-		for i,Frame in pairs(self.CutFrames) do
-			Frame[3].BackgroundColor3 = Keypoints[i].Value
-			Frame[3].BackgroundTransparency = self.BackgroundTransparency
-			Frame[3].ZIndex = self.ZIndex
+	local SizeX = math.floor(self.AdornFrame.AbsoluteSize.X + 0.5)
+	if typeof(self.BackgroundColor3) == "ColorSequence" then
+		--Set the gradients.
+		self:__SetGradient(self.TopLeftTriangle,0,self.TopLeftTriangle.Size.X.Offset/SizeX)
+		self:__SetGradient(self.TopRightTriangle,self.TopRightTriangle.Position.X.Offset/SizeX,1)
+		self:__SetGradient(self.BottomLeftTriangle,0,self.BottomLeftTriangle.Size.X.Offset/SizeX)
+		self:__SetGradient(self.BottomRightTriangle,self.BottomRightTriangle.Position.X.Offset/SizeX,1)
+		for _,Frame in pairs(self.RectangleFrames) do
+			self:__SetGradient(Frame,Frame.Position.X.Offset/SizeX,(Frame.Position.X.Offset + Frame.Size.X.Offset)/SizeX)
 		end
 	else
-		for _,Frame in pairs(self.CutFrames) do
-			Frame[3].BackgroundColor3 = Color
-			Frame[3].BackgroundTransparency = self.BackgroundTransparency
-			Frame[3].ZIndex = self.ZIndex
+		--Remove the gradients.
+		self:__RemoveGradient(self.TopLeftTriangle)
+		self:__RemoveGradient(self.TopRightTriangle)
+		self:__RemoveGradient(self.BottomLeftTriangle)
+		self:__RemoveGradient(self.BottomRightTriangle)
+		for _,Frame in pairs(self.RectangleFrames) do
+			self:__RemoveGradient(Frame)
 		end
-	end
-end
-
---[[
-Updates the size, positions, and parents of the
-adorned frames for the current cuts.
---]]
-function ColoredCutFrame:__UpdateFrames()
-	--Determine the amount of needed frames.
-	local NeededFrames = 1
-	if typeof(self.BackgroundColor3) == "ColorSequence" then
-		NeededFrames = #self.BackgroundColor3.Keypoints - 1
-	end
-	
-	--Add/remove cut frames.
-	for i = 1,NeededFrames - #self.CutFrames do
-		local ClipFrame = Instance.new("Frame")
-		ClipFrame.BackgroundTransparency = 1
-		ClipFrame.ClipsDescendants = true
-		ClipFrame.Parent = self.AdornFrame
-		
-		local SubAdornFrame = Instance.new("Frame")
-		SubAdornFrame.BackgroundTransparency = 1
-		SubAdornFrame.Parent = ClipFrame
-		
-		local AdornedCutFrame = CutFrame.new(SubAdornFrame)
-		AdornedCutFrame.CutPoints = self.CutPoints
-		
-		table.insert(self.CutFrames,{ClipFrame,SubAdornFrame,AdornedCutFrame})
-	end
-	
-	for i = 1,#self.CutFrames - NeededFrames do
-		local FrameData = self.CutFrames[#self.CutFrames]
-		FrameData[1]:Destroy()
-		FrameData[3]:Destroy()
-		table.remove(self.CutFrames,#self.CutFrames)
-	end
-	
-	--Set the frame positions.
-	local SizeX,SizeY = self.AdornFrame.AbsoluteSize.X,self.AdornFrame.AbsoluteSize.Y
-	local LastPos = 0
-	for i,FrameData in pairs(self.CutFrames) do
-		--Get the size and position.
-		local WidthRelative = 1
-		if typeof(self.BackgroundColor3) == "ColorSequence" then
-			local Keypoints = self.BackgroundColor3.Keypoints
-			local Start,End = Keypoints[i].Time,Keypoints[i + 1].Time
-			WidthRelative = End - Start
-		end
-		
-		--Set the size and positions.
-		local NewSizeX = math.floor((SizeX * WidthRelative) + 0.5)
-		local ClipFrame,SubAdornFrame,AdornedCutFrame = FrameData[1],FrameData[2],FrameData[3]
-		ClipFrame.Size = UDim2.new(0,NewSizeX,1,0)
-		ClipFrame.Position = UDim2.new(0,LastPos,0,0)
-		SubAdornFrame.Size = UDim2.new(0,SizeX,0,SizeY)
-		SubAdornFrame.Position = UDim2.new(0,-LastPos,0,0)
-		LastPos = math.floor(LastPos + NewSizeX)
-	end
-	
-	--Update the properties.
-	self:__UpdateVisibleFrames()
-end
-
---[[
-Cuts a corner (horizontal and veritcal side) with
-a given UDim2 "cut" and relative constraint.
---]]
-function ColoredCutFrame:__CutCorner(HorizontalSideName,VerticalSideName,CutSize,Constraint)
-	CutFrame.__CutCorner(self,HorizontalSideName,VerticalSideName,CutSize,Constraint)
-	self:__UpdateFrames()
-end
-
-
-	
---[[
-Optimizes a ColorSequence and removes common colors.
---]]
-function ColoredCutFrame:OptimizeColorSequence(Sequence)
-	local Keypoints = {}
-	local LastColor
-	
-	--Add the colors.
-	for _,Keypoint in pairs(Sequence.Keypoints) do
-		if Keypoint.Time == 1 or Keypoint.Value ~= LastColor then
-			LastColor = Keypoint.Value
-			table.insert(Keypoints,Keypoint)
-		end
-	end
-	
-	--Return the new sequence.
-	return ColorSequence.new(Keypoints)
-end
-
---[[
-Cuts a corner (horizontal and veritcal side) with
-a given UDim2 "cut" and relative constraint.
---]]
-function ColoredCutFrame:CutCorner(HorizontalSideName,VerticalSideName,CutSize,Constraint)
-	CutFrame.CutCorner(self,HorizontalSideName,VerticalSideName,CutSize,Constraint)
-end
-
---[[
-Removes a cut from a corner (horizontal and veritcal side).
---]]
-function ColoredCutFrame:RemoveCut(HorizontalSideName,VerticalSideName)
-	CutFrame.RemoveCut(self,HorizontalSideName,VerticalSideName)
-	self:__UpdateFrames()
-end
-
---[[
-Disconnects all events and destroys the adorned frames.
---]]
-function ColoredCutFrame:Destroy()
-	--Disconnect the events.
-	for _,Event in pairs(self.__Events) do
-		Event:Disconnect()
-	end
-	
-	--Destory the frames.
-	for _,Frame in pairs(self.CutFrames) do
-		Frame[1]:Destroy()
-		Frame[3]:Destroy()
 	end
 end
 

@@ -100,7 +100,7 @@ function CutFrame:__InitializeEvents()
 	self.__Events = Events
 	
 	table.insert(Events,self:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
-		self:__UpdateVisibleFrames()
+		self.object:__UpdateVisibleFrames()
 	end))
 	table.insert(Events,self:GetPropertyChangedSignal("BackgroundTransparency"):Connect(function()
 		self:__UpdateVisibleFrames()
@@ -159,22 +159,33 @@ frames. Should be run after CutFrame:__UpdateFrames().
 --]]
 function CutFrame:__UpdateVisibleFrames()
 	--Update the triangles.
-	self.TopLeftTriangle.ImageColor3 = self.BackgroundColor3
+	if typeof(self.BackgroundColor3) == "Color3" then
+		self.TopLeftTriangle.ImageColor3 = self.BackgroundColor3
+		self.TopRightTriangle.ImageColor3 = self.BackgroundColor3
+		self.BottomLeftTriangle.ImageColor3 = self.BackgroundColor3
+		self.BottomRightTriangle.ImageColor3 = self.BackgroundColor3
+	else
+		self.TopLeftTriangle.ImageColor3 = Color3.new(1,1,1)
+		self.TopRightTriangle.ImageColor3 = Color3.new(1,1,1)
+		self.BottomLeftTriangle.ImageColor3 = Color3.new(1,1,1)
+		self.BottomRightTriangle.ImageColor3 = Color3.new(1,1,1)
+	end
 	self.TopLeftTriangle.ImageTransparency = self.BackgroundTransparency
 	self.TopLeftTriangle.ZIndex = self.ZIndex
-	self.TopRightTriangle.ImageColor3 = self.BackgroundColor3
 	self.TopRightTriangle.ImageTransparency = self.BackgroundTransparency
 	self.TopRightTriangle.ZIndex = self.ZIndex
-	self.BottomLeftTriangle.ImageColor3 = self.BackgroundColor3
 	self.BottomLeftTriangle.ImageTransparency = self.BackgroundTransparency
 	self.BottomLeftTriangle.ZIndex = self.ZIndex
-	self.BottomRightTriangle.ImageColor3 = self.BackgroundColor3
 	self.BottomRightTriangle.ImageTransparency = self.BackgroundTransparency
 	self.BottomRightTriangle.ZIndex = self.ZIndex
 	
 	--Update the frames.
 	for _,Frame in pairs(self.RectangleFrames) do
-		Frame.BackgroundColor3 = self.BackgroundColor3
+		if typeof(self.BackgroundColor3) == "Color3" then
+			Frame.BackgroundColor3 = self.BackgroundColor3
+		else
+			Frame.BackgroundColor3 = Color3.new(1,1,1)
+		end
 		Frame.BackgroundTransparency = self.BackgroundTransparency
 		Frame.ZIndex = self.ZIndex
 	end
@@ -281,7 +292,7 @@ function CutFrame:__UpdateFrames()
 	end
 	
 	--Update the properties.
-	self:__UpdateVisibleFrames()
+	self.object:__UpdateVisibleFrames()
 end
 
 --[[
