@@ -131,9 +131,7 @@ function CutFrame:__InitializeCutting()
 		for _,Cut in pairs(self.__PersistentCuts) do
 			local HorizontalSideName,VerticalSideName = Cut[1],Cut[2]
 			local CutSize,Constraint = Cut[3],Cut[4]
-			if Constraint ~= Enum.SizeConstraint.RelativeXY then
-				self:__CutCorner(HorizontalSideName,VerticalSideName,CutSize,Constraint)
-			end
+			self:__CutCorner(HorizontalSideName,VerticalSideName,CutSize,Constraint)
 		end
 	end
 	
