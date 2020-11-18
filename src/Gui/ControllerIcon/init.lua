@@ -122,6 +122,8 @@ end
 Destroys the frame.
 --]]
 function ControllerIcon:Destroy()
+	self.super:Destroy()
+	
 	--Disconnect the events.
 	for _,Event in pairs(self.__Events) do
 		Event:Disconnect()

@@ -363,6 +363,8 @@ end
 Destroys the frame and disconnects the events.
 --]]
 function NexusButton:Destroy()
+	self.super:Destroy()
+	
 	--Disconnect the events.
 	for _,Event in pairs(self.__Events) do
 		Event:Disconnect()

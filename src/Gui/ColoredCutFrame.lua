@@ -7,11 +7,8 @@ can be a Color3 or a ColorSequence.
 --]]
 
 local RootModule = script.Parent.Parent
-local Data = RootModule:WaitForChild("Data")
 local Gui = RootModule:WaitForChild("Gui")
 
-local RectSide = require(Data:WaitForChild("RectSide"))
-local RectPoint8 = require(Data:WaitForChild("RectPoint8"))
 local CutFrame = require(Gui:WaitForChild("CutFrame"))
 
 local ColoredCutFrame = CutFrame:Extend()

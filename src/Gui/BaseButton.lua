@@ -200,6 +200,8 @@ end
 Destroys the frame and disconnects the events.
 --]]
 function BaseButton:Destroy()
+	self.super:Destroy()
+	
 	--Disconnect the events.
 	for _,Event in pairs(self.__Events) do
 		Event:Disconnect()

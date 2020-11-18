@@ -355,6 +355,8 @@ end
 Disconnects all events and destroys the adorned frames.
 --]]
 function CutFrame:Destroy()
+	self.super:Destroy()
+	
 	--Disconnect the events.
 	for _,Event in pairs(self.__Events) do
 		Event:Disconnect()
