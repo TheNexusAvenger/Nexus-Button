@@ -6,97 +6,91 @@ Unit tests for the NeuxsButton class.
 
 local NexusUnitTesting = require("NexusUnitTesting")
 
-local Data = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Data")
-local Gui = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Gui")
-
 local NexusButton = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"))
+local NexusButtonTest = NexusUnitTesting.UnitTest:Extend()
 
 
+
+--[[
+Sets up the test.
+--]]
+function NexusButtonTest:Setup()
+	self.CuT = NexusButton.new()
+end
+
+--[[
+Cleans up the test.
+--]]
+function NexusButtonTest:Teardown()
+	self.CuT:Destroy()
+end
 
 --[[
 Test that the constructor works without failing.
 --]]
-NexusUnitTesting:RegisterUnitTest("Constructor",function(UnitTest)
-	--Create the NexusButton object.
-	local CuT = NexusButton.new()
-	
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("Constructor"):SetRun(function(self)
 	--Run the assertions.
-	UnitTest:AssertEquals(CuT.ClassName,"NexusButton","ClassName is incorrect.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self:AssertEquals(self.CuT.ClassName,"NexusButton","ClassName is incorrect.")
+end))
 
 --[[
 Tests replication of properties.
 --]]
-NexusUnitTesting:RegisterUnitTest("Replication",function(UnitTest)
-	--Create the component under testing.
-	local CuT = NexusButton.new()
-	local AdornFrame = CuT.AdornFrame
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("Replication"):SetRun(function(self)
+	local AdornFrame = self.CuT.AdornFrame
 	
 	--Assert properties that aren't set can be read from.
-	UnitTest:AssertEquals(CuT.Name,AdornFrame.Name,"Name isn't passed through correctly.")
-	UnitTest:AssertEquals(CuT.Size,AdornFrame.Size,"Size isn't passed through correctly.")
-	UnitTest:AssertEquals(CuT.Parent,AdornFrame.Parent,"Parent isn't passed through correctly.")
+	self:AssertEquals(self.CuT.Name,AdornFrame.Name,"Name isn't passed through correctly.")
+	self:AssertEquals(self.CuT.Size,AdornFrame.Size,"Size isn't passed through correctly.")
+	self:AssertEquals(self.CuT.Parent,AdornFrame.Parent,"Parent isn't passed through correctly.")
 	
 	--Set values and assert they are replicated from the CuT to the frame.
 	local TestFrame = Instance.new("Frame")
-	CuT.Name = "Test1"
-	CuT.Size = UDim2.new(1,2,3,4)
-	CuT.Parent = TestFrame
-	UnitTest:AssertEquals(CuT.Name,"Test1","Name wasn't set correctly.")
-	UnitTest:AssertEquals(CuT.Size,UDim2.new(1,2,3,4),"Size wasn't set correctly.")
-	UnitTest:AssertEquals(CuT.Parent,TestFrame,"Parent wasn't set correctly.")
-	UnitTest:AssertEquals(AdornFrame.Name,"Test1","Name wasn't replicated correctly.")
-	UnitTest:AssertEquals(AdornFrame.Size,UDim2.new(1,2,3,4),"Size wasn't replicated correctly.")
-	UnitTest:AssertEquals(AdornFrame.Parent,TestFrame,"Parent wasn't replicated correctly.")
+	self.CuT.Name = "Test1"
+	self.CuT.Size = UDim2.new(1,2,3,4)
+	self.CuT.Parent = TestFrame
+	self:AssertEquals(self.CuT.Name,"Test1","Name wasn't set correctly.")
+	self:AssertEquals(self.CuT.Size,UDim2.new(1,2,3,4),"Size wasn't set correctly.")
+	self:AssertEquals(self.CuT.Parent,TestFrame,"Parent wasn't set correctly.")
+	self:AssertEquals(AdornFrame.Name,"Test1","Name wasn't replicated correctly.")
+	self:AssertEquals(AdornFrame.Size,UDim2.new(1,2,3,4),"Size wasn't replicated correctly.")
+	self:AssertEquals(AdornFrame.Parent,TestFrame,"Parent wasn't replicated correctly.")
 	
 	--Set values and assert they are replicated from the frame to the CuT.
 	AdornFrame.Name = "Test2"
 	AdornFrame.Size = UDim2.new(5,6,7,8)
 	AdornFrame.Parent = nil
-	UnitTest:AssertEquals(CuT.Name,"Test2","Name wasn't replicated correctly.")
-	UnitTest:AssertEquals(CuT.Size,UDim2.new(5,6,7,8),"Size wasn't replicated correctly.")
-	UnitTest:AssertEquals(CuT.Parent,nil,"Parent wasn't replicated correctly.")
-	UnitTest:AssertEquals(AdornFrame.Name,"Test2","Name wasn't set correctly.")
-	UnitTest:AssertEquals(AdornFrame.Size,UDim2.new(5,6,7,8),"Size wasn't set correctly.")
-	UnitTest:AssertEquals(AdornFrame.Parent,nil,"Parent wasn't set correctly.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self:AssertEquals(self.CuT.Name,"Test2","Name wasn't replicated correctly.")
+	self:AssertEquals(self.CuT.Size,UDim2.new(5,6,7,8),"Size wasn't replicated correctly.")
+	self:AssertEquals(self.CuT.Parent,nil,"Parent wasn't replicated correctly.")
+	self:AssertEquals(AdornFrame.Name,"Test2","Name wasn't set correctly.")
+	self:AssertEquals(AdornFrame.Size,UDim2.new(5,6,7,8),"Size wasn't set correctly.")
+	self:AssertEquals(AdornFrame.Parent,nil,"Parent wasn't set correctly.")
+end))
 
 --[[
 Tests the BorderSize properties.
 --]]
-NexusUnitTesting:RegisterUnitTest("BorderSize",function(UnitTest)
-	--Create the component under testing.
-	local CuT = NexusButton.new()
-	local BorderAdorn = CuT.BorderAdorn
-	CuT.BorderSizePixel = 0
-	CuT.BorderSizeScale = 0
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("BorderSize"):SetRun(function(self)
+	local BorderAdorn = self.CuT.BorderAdorn
+	self.CuT.BorderSizePixel = 0
+	self.CuT.BorderSizeScale = 0
 	
 	--Set the BorderSizePixel and asset the size is correct.
-	CuT.BorderSizePixel = 10
-	UnitTest:AssertEquals(BorderAdorn.Size,UDim2.new(1,0,1,10),"Border size is incorrect.")
+	self.CuT.BorderSizePixel = 10
+	self:AssertEquals(BorderAdorn.Size,UDim2.new(1,0,1,10),"Border size is incorrect.")
 	
 	--Set the BorderSizeScale and asset the size is correct.
-	CuT.BorderSizeScale = 0.4
-	UnitTest:AssertEquals(BorderAdorn.Size,UDim2.new(1,0,1.4,10),"Border size is incorrect.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self.CuT.BorderSizeScale = 0.4
+	self:AssertEquals(BorderAdorn.Size,UDim2.new(1,0,1.4,10),"Border size is incorrect.")
+end))
 
 --[[
 Tests the color properties.
 --]]
-NexusUnitTesting:RegisterUnitTest("Colors",function(UnitTest)
-	--Create the component under testing.
-	local CuT = NexusButton.new()
-	local BackgroundCutFrame = CuT.BackgroundCutFrame
-	local BorderCutFrame = CuT.BorderCutFrame
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("Colors"):SetRun(function(self)
+	local BackgroundCutFrame = self.CuT.BackgroundCutFrame
+	local BorderCutFrame = self.CuT.BorderCutFrame
 	
 	--Create the colors.
 	local BaseBackgroundColor = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.new(0,0,0)),ColorSequenceKeypoint.new(0.5,Color3.new(0.5,0.5,0.5)),ColorSequenceKeypoint.new(1,Color3.new(0.5,0.5,0.5))})
@@ -105,68 +99,58 @@ NexusUnitTesting:RegisterUnitTest("Colors",function(UnitTest)
 	local BaseBorderColor = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.new(0.5,0.5,0.5)),ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),ColorSequenceKeypoint.new(1,Color3.new(1,1,1))})
 	
 	--Set the colors and assert they are correct.
-	CuT.BackgroundColor3 = BaseBackgroundColor
-	CuT.BorderColor3 = BaseBorderColor
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.BackgroundColor3 = BaseBackgroundColor
+	self.CuT.BorderColor3 = BaseBorderColor
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
 	
 	--Assert that the states change the colors correctly.
-	CuT.__Hovered = true
-	CuT:__UpdateColors()
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,HoverBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	CuT.__Clicked = true
-	CuT:__UpdateColors()
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	CuT.AutoButtonColor = false
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	CuT.AutoButtonColor = true
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	CuT.__Hovered = false
-	CuT:__UpdateColors()
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	CuT.__Clicked = false
-	CuT:__UpdateColors()
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self.CuT.__Hovered = true
+	self.CuT:__UpdateColors()
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,HoverBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.__Clicked = true
+	self.CuT:__UpdateColors()
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.AutoButtonColor = false
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.AutoButtonColor = true
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.__Hovered = false
+	self.CuT:__UpdateColors()
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,ClickBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+	self.CuT.__Clicked = false
+	self.CuT:__UpdateColors()
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,BaseBackgroundColor,"Background color is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundColor3,BaseBorderColor,"Border color is incorrect.")
+end))
 
 --[[
 Tests the transparency properties.
 --]]
-NexusUnitTesting:RegisterUnitTest("Transparency",function(UnitTest)
-	--Create the component under testing.
-	local CuT = NexusButton.new()
-	local BackgroundCutFrame = CuT.BackgroundCutFrame
-	local BorderCutFrame = CuT.BorderCutFrame
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("Transparency"):SetRun(function(self)
+	local BackgroundCutFrame = self.CuT.BackgroundCutFrame
+	local BorderCutFrame = self.CuT.BorderCutFrame
 	
 	--Set the transparencies and assert they are correct.
-	CuT.BackgroundTransparency = 0.25
-	CuT.BorderTransparency = 0.75
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundTransparency,0.25,"Background transparency is incorrect.")
-	UnitTest:AssertEquals(BorderCutFrame.BackgroundTransparency,0.75,"Border transparency is incorrect.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self.CuT.BackgroundTransparency = 0.25
+	self.CuT.BorderTransparency = 0.75
+	self:AssertEquals(BackgroundCutFrame.BackgroundTransparency,0.25,"Background transparency is incorrect.")
+	self:AssertEquals(BorderCutFrame.BackgroundTransparency,0.75,"Border transparency is incorrect.")
+end))
 
 --[[
 Tests the controller colors.
 --]]
-NexusUnitTesting:RegisterUnitTest("ControllerColors",function(UnitTest)
-	--Create the component under testing.
-	local CuT = NexusButton.new()
-	local BackgroundCutFrame = CuT.BackgroundCutFrame
-	local GamepadIcon = CuT.GamepadIcon
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("ControllerColors"):SetRun(function(self)
+	local BackgroundCutFrame = self.CuT.BackgroundCutFrame
+	local GamepadIcon = self.CuT.GamepadIcon
 	GamepadIcon.IconVisible = true
-	CuT.Size = UDim2.new(0,200,0,50)
+	self.CuT.Size = UDim2.new(0,200,0,50)
 	
 	--Create the colors.
 	local SingleColor = Color3.new(0.5,0.5,0.5)
@@ -175,18 +159,15 @@ NexusUnitTesting:RegisterUnitTest("ControllerColors",function(UnitTest)
 	local MixedControllerColor = ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.new(0,0,0)),ColorSequenceKeypoint.new(0.5,Color3.new(0.5,0.5,0.5)),ColorSequenceKeypoint.new(0.75,Color3.new(50/255,50/255,50/255)),ColorSequenceKeypoint.new(1,Color3.new(50/255,50/255,50/255))})
 	
 	--Set the color and assert it is correct.
-	CuT.BackgroundColor3 = MixedColor
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,MixedControllerColor,"Background color is incorrect.")
-	CuT.BackgroundColor3 = SingleColor
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleControllerColor,"Background color is incorrect.")
+	self.CuT.BackgroundColor3 = MixedColor
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,MixedControllerColor,"Background color is incorrect.")
+	self.CuT.BackgroundColor3 = SingleColor
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleControllerColor,"Background color is incorrect.")
 	
 	--Hide the controller icon and assert the color was reverted.
 	GamepadIcon.IconVisible = false
-	UnitTest:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleColor,"Background color is incorrect.")
-	
-	--Clean up the component under testing.
-	CuT:Destroy()
-end)
+	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleColor,"Background color is incorrect.")
+end))
 
 
 

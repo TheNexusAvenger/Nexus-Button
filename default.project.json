@@ -10,7 +10,7 @@
 				"$path": "module/NexusInstance/src"
 			  }
 			},
-			"NexusButtonTests": {
+			"NexusButtonTests.nexusspec": {
 			  "$path": "test"
 			}
 		}

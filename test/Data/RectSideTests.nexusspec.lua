@@ -10,13 +10,14 @@ local NexusButton = game:GetService("ReplicatedStorage"):WaitForChild("NexusButt
 local Data = NexusButton:WaitForChild("Data")
 
 local RectSide = require(Data:WaitForChild("RectSide"))
+local RectSideTest = NexusUnitTesting.UnitTest:Extend()
 
 
 
 --[[
 Test that the constructor works without failing.
 --]]
-NexusUnitTesting:RegisterUnitTest("Constructor",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("Constructor"):SetRun(function(self)
 	local Point1 = UDim.new(0.25,0)
 	local Point2 = UDim.new(0.75,0)
 	
@@ -24,38 +25,38 @@ NexusUnitTesting:RegisterUnitTest("Constructor",function(UnitTest)
 	local CuT = RectSide.new(Point1,Point2)
 	
 	--Run the assertions.
-	UnitTest:AssertEquals(CuT.ClassName,"RectSide","ClassName is incorrect.")
-	UnitTest:AssertEquals(Point1,CuT.Point1,"Point1 is incorrect.")
-	UnitTest:AssertEquals(Point2,CuT.Point2,"Point2 is incorrect.")
-end)
+	self:AssertEquals(CuT.ClassName,"RectSide","ClassName is incorrect.")
+	self:AssertEquals(Point1,CuT.Point1,"Point1 is incorrect.")
+	self:AssertEquals(Point2,CuT.Point2,"Point2 is incorrect.")
+end))
 
 --[[
 Test that the constructor fails with incorrect arguments.
 --]]
-NexusUnitTesting:RegisterUnitTest("ConstructorInvalidParameters",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("ConstructorInvalidParameters"):SetRun(function(self)
 	local Point1 = UDim.new(0.25,0)
 	local Point2 = UDim.new(0.75,0)
 	local NotAPoint = "Fail"
 	
 	--Assert various errors.
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		RectSide.new()
 	end,"Constructor accepted no parameters.")
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		RectSide.new(Point1)
 	end,"Constructor accepted 1 parameter.")
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		RectSide.new(nil,Point2)
 	end,"Constructor accepted 1 parameter.")
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		RectSide.new(NotAPoint,Point2)
 	end,"Constructor accepted non-point parameter.")
-end)
+end))
 
 --[[
 Test that the points are immutable
 --]]
-NexusUnitTesting:RegisterUnitTest("Immutable",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("Immutable"):SetRun(function(self)
 	local Point1 = UDim.new(0.25,0)
 	local Point2 = UDim.new(0.75,0)
 	
@@ -63,18 +64,18 @@ NexusUnitTesting:RegisterUnitTest("Immutable",function(UnitTest)
 	local CuT = RectSide.new(Point1,Point2)
 	
 	--Run the assertions.
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		CuT.Point1 = Point2
 	end,"Point1 is mutable.")
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		CuT.Point2 = Point1
 	end,"Point2 is mutable.")
-end)
+end))
 
 --[[
 Tests the ReplacePoint function.
 --]]
-NexusUnitTesting:RegisterUnitTest("ReplacePoint",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("ReplacePoint"):SetRun(function(self)
 	local Point1 = UDim.new(0.25,0)
 	local Point2 = UDim.new(0.75,0)
 	local Point3 = UDim.new(0.5,0)
@@ -85,18 +86,18 @@ NexusUnitTesting:RegisterUnitTest("ReplacePoint",function(UnitTest)
 	local CuT3 = CuT1:ReplacePoint("Point2",Point3)
 	
 	--Run the assertions.
-	UnitTest:AssertEquals(Point1,CuT1.Point1,"Point1 is mutated.")
-	UnitTest:AssertEquals(Point2,CuT1.Point2,"Point2 is mutated.")
-	UnitTest:AssertEquals(Point3,CuT2.Point1,"Point1 is incorrect.")
-	UnitTest:AssertEquals(Point2,CuT2.Point2,"Point2 is mutated.")
-	UnitTest:AssertEquals(Point1,CuT3.Point1,"Point1 is mutated.")
-	UnitTest:AssertEquals(Point3,CuT3.Point2,"Point2 is incorrect.")
-end)
+	self:AssertEquals(Point1,CuT1.Point1,"Point1 is mutated.")
+	self:AssertEquals(Point2,CuT1.Point2,"Point2 is mutated.")
+	self:AssertEquals(Point3,CuT2.Point1,"Point1 is incorrect.")
+	self:AssertEquals(Point2,CuT2.Point2,"Point2 is mutated.")
+	self:AssertEquals(Point1,CuT3.Point1,"Point1 is mutated.")
+	self:AssertEquals(Point3,CuT3.Point2,"Point2 is incorrect.")
+end))
 
 --[[
 Tests the GetOrderedPoints function.
 --]]
-NexusUnitTesting:RegisterUnitTest("GetOrderedPoints",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("GetOrderedPoints"):SetRun(function(self)
 	local Point1 = UDim.new(0,50)
 	local Point2 = UDim.new(0.25,0)
 	
@@ -110,8 +111,8 @@ NexusUnitTesting:RegisterUnitTest("GetOrderedPoints",function(UnitTest)
 		local SecondPoint = (FirstPoint == Point1 and Point2) or Point1
 		
 		local ActualFirstPoint,ActualSecondPoint = CuT:GetOrderedPoints(Length)
-		UnitTest:AssertEquals(FirstPoint,ActualFirstPoint,"First point is incorrect.")
-		UnitTest:AssertEquals(SecondPoint,ActualSecondPoint,"Second point is incorrect.")
+		self:AssertEquals(FirstPoint,ActualFirstPoint,"First point is incorrect.")
+		self:AssertEquals(SecondPoint,ActualSecondPoint,"Second point is incorrect.")
 	end
 	
 	--Run the assertions.
@@ -119,12 +120,12 @@ NexusUnitTesting:RegisterUnitTest("GetOrderedPoints",function(UnitTest)
 	AssertOrder(0,Point2)
 	AssertOrder(25,Point2)
 	AssertOrder(100,Point1)
-end)
+end))
 
 --[[
 Tests the GetOrderedPoints function with invalid parameters.
 --]]
-NexusUnitTesting:RegisterUnitTest("GetOrderedPointsInvalidParameters",function(UnitTest)
+NexusUnitTesting:RegisterUnitTest(RectSideTest.new("GetOrderedPointsInvalidParameters"):SetRun(function(self)
 	local Point1 = UDim.new(0,50)
 	local Point2 = UDim.new(0.75,0)
 	
@@ -132,13 +133,13 @@ NexusUnitTesting:RegisterUnitTest("GetOrderedPointsInvalidParameters",function(U
 	local CuT = RectSide.new(Point1,Point2)
 	
 	--Assert various errors.
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		CuT:GetOrderedPointsInvalidParameters()
 	end,"Accepted no parameters.")
-	UnitTest:AssertErrors(function()
+	self:AssertErrors(function()
 		CuT:GetOrderedPointsInvalidParameters("Fail")
 	end,"Accepted non-number parameter.")
-end)
+end))
 
 
 
