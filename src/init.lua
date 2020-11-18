@@ -113,7 +113,7 @@ function NexusButton:__new()
 	local ContentsAdorn = Instance.new("Frame")
 	ContentsAdorn.BackgroundTransparency = 1
 	ContentsAdorn.Size = UDim2.new(1,0,1,0)
-	ContentsAdorn.ZIndex = 4
+	ContentsAdorn.ZIndex = 5
 	ContentsAdorn.Parent = AdornFrame
 	self.ContentsAdorn = ContentsAdorn
 	
@@ -123,7 +123,7 @@ function NexusButton:__new()
 	GamepadIcon.AdornFrame.Position = UDim2.new(1,0,0,0)
 	GamepadIcon.AdornFrame.SizeConstraint = "RelativeYY"
 	GamepadIcon.AdornFrame.AnchorPoint = Vector2.new(1,0)
-	GamepadIcon.AdornFrame.ZIndex = 3
+	GamepadIcon.AdornFrame.ZIndex = 5
 	GamepadIcon.AdornFrame.Parent = AdornFrame
 	self.GamepadIcon = GamepadIcon
 	

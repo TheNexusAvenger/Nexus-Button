@@ -81,6 +81,7 @@ function TextButtonFactory:Create()
 	TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 	TextLabel.Position = UDim2.new(0.5,0,0.5,0)
 	TextLabel.BackgroundTransparency = 1
+	TextLabel.ZIndex = 5
 	TextLabel.Parent = Button:GetAdornFrame()
 	
 	--Set the text defaults.

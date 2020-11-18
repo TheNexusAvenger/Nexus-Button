@@ -97,6 +97,7 @@ function ControllerIcon:SetIcon(KeyCode)
 	local Icon = ControllerIconCreator:GetImageLabel(KeyCode,"Dark","XboxOne")
 	Icon.Position = UDim2.new(0.5,0,0.5,0)
 	Icon.AnchorPoint = Vector2.new(0.5,0.5)
+	Icon.ZIndex = self.AdornFrame.ZIndex
 	Icon.Parent = self.AdornFrame
 	self.Icon = Icon
 	self.KeyCode = KeyCode
