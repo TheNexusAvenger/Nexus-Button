@@ -37,6 +37,7 @@ function CutFrame:__new(AdornFrame)
 	--Set up the base properties.
 	self.BackgroundColor3 = Color3.new(1,1,1)
 	self.BackgroundTransparency = 0
+	self.ZIndex = 1
 	
 	--Set up the "cut points".
 	local DefaultSide = RectSide.new(UDim.new(0,0),UDim.new(0,0))

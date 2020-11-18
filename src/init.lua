@@ -111,7 +111,7 @@ function NexusButton:__new()
 	local ContentsAdorn = Instance.new("Frame")
 	ContentsAdorn.BackgroundTransparency = 1
 	ContentsAdorn.Size = UDim2.new(1,0,1,0)
-	ContentsAdorn.ZIndex = 3
+	ContentsAdorn.ZIndex = 4
 	ContentsAdorn.Parent = AdornFrame
 	self.ContentsAdorn = ContentsAdorn
 	
@@ -128,6 +128,7 @@ function NexusButton:__new()
 	--Create the cut frames.
 	self.BorderCutFrame = ColoredCutFrame.new(BorderAdorn)
 	self.BackgroundCutFrame = ColoredCutFrame.new(AdornFrame)
+	self.BackgroundCutFrame.ZIndex = 2
 	
 	--Set up the events.
 	table.insert(self.__Events,AdornFrame.MouseEnter:Connect(function()
@@ -328,7 +329,7 @@ function NexusButton:__UpdateCuts()
 	--Set the border cuts.
 	local BorderMultiplier = BackgroundSizeY/BorderSizeY
 	self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
-	self.BorderCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE,0,CORNER_CUT_BACKGROUND_RELATIVE,0),"RelativeYY")
+	self.BorderCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
 end
 
 --[[
