@@ -221,8 +221,8 @@ function NexusButton:__new()
 		end
 	end))
 	table.insert(self.__Events,BorderAdorn:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		if AdornFrame.AbsoluteSize.Y == 0 then
-			self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(0,0,0,0),"RelativeYY")
+		if AdornFrame.AbsoluteSize.Y == 0 or not self.BottomRightCutEnabled then
+			self.BorderCutFrame:RemoveCut("Bottom","Right")
 		else
 			local BorderSizeRelative = (BorderAdorn.AbsoluteSize.Y/AdornFrame.AbsoluteSize.Y) - 1
 			local BorderCornerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (1 + BorderSizeRelative)
