@@ -91,6 +91,8 @@ function NexusButton:__new()
 	self.__Hovered = false
 	self.__Clicked = false
 	self.BorderSizePixel = 0
+	self.TopLeftCutEnabled = true
+	self.BottomRightCutEnabled = true
 	self.__Events = {}
 	
 	--Create the button as the adorn frame.
@@ -204,6 +206,12 @@ function NexusButton:__new()
 	end
 	CustomReplication["BorderTransparency"] = function()
 		self.BorderCutFrame.BackgroundTransparency = self.BorderTransparency
+	end
+	CustomReplication["TopLeftCutEnabled"] = function()
+		self:__UpdateCuts()
+	end
+	CustomReplication["BottomRightCutEnabled"] = function()
+		self:__UpdateCuts()
 	end
 	
 	--Set up events.
@@ -323,13 +331,29 @@ function NexusButton:__UpdateCuts()
 	
 	--Set the background cuts.
 	local BackgroundInnerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (BackgroundSizeY/BorderSizeY)
-	self.BackgroundCutFrame:CutCorner("Bottom","Right",UDim2.new(BackgroundInnerCutRelative,0,BackgroundInnerCutRelative,0),"RelativeYY")
-	self.BackgroundCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE,0,CORNER_CUT_BACKGROUND_RELATIVE,0),"RelativeYY")
+	if self.BottomRightCutEnabled then
+		self.BackgroundCutFrame:CutCorner("Bottom","Right",UDim2.new(BackgroundInnerCutRelative,0,BackgroundInnerCutRelative,0),"RelativeYY")
+	else
+		self.BackgroundCutFrame:RemoveCut("Bottom","Right")
+	end
+	if self.TopLeftCutEnabled then
+		self.BackgroundCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE,0,CORNER_CUT_BACKGROUND_RELATIVE,0),"RelativeYY")
+	else
+		self.BackgroundCutFrame:RemoveCut("Top","Left")
+	end
 	
 	--Set the border cuts.
 	local BorderMultiplier = BackgroundSizeY/BorderSizeY
-	self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
-	self.BorderCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
+	if self.BottomRightCutEnabled then
+		self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
+	else
+		self.BorderCutFrame:RemoveCut("Bottom","Right")
+	end
+	if self.TopLeftCutEnabled then
+		self.BorderCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
+	else
+		self.BorderCutFrame:RemoveCut("Top","Left")
+	end
 end
 
 --[[

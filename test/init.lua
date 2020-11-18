@@ -169,6 +169,48 @@ NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("ControllerColors"):SetRun
 	self:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleColor,"Background color is incorrect.")
 end))
 
+--[[
+Tests disabling cuts.
+--]]
+NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("DisableCuts"):SetRun(function(self)
+	local BackgroundCutFrame = self.CuT.BackgroundCutFrame
+	local BorderCutFrame = self.CuT.BorderCutFrame
+	
+	--Assert that the cuts exist.
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+
+	--Disable the top left cut and assert it is correct.
+	self.CuT.TopLeftCutEnabled = false
+	self:AssertNil(BackgroundCutFrame.__PersistentCuts["Top_Left"],"Cut exists.")
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+	self:AssertNil(BorderCutFrame.__PersistentCuts["Top_Left"],"Cut exists.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+
+	--Disable the bottom right cut and assert it is correct.
+	self.CuT.BottomRightCutEnabled = false
+	self:AssertNil(BackgroundCutFrame.__PersistentCuts["Top_Left"],"Cut exists.")
+	self:AssertNil(BackgroundCutFrame.__PersistentCuts["Bottom_Right"],"Cut exists.")
+	self:AssertNil(BorderCutFrame.__PersistentCuts["Top_Left"],"Cut exists.")
+	self:AssertNil(BorderCutFrame.__PersistentCuts["Bottom_Right"],"Cut exists.")
+
+	--Enable the top left cut and assert it is correct.
+	self.CuT.TopLeftCutEnabled = true
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNil(BackgroundCutFrame.__PersistentCuts["Bottom_Right"],"Cut exists.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNil(BorderCutFrame.__PersistentCuts["Bottom_Right"],"Cut exists.")
+
+	--Enable the bottom right cut and assert it is correct.
+	self.CuT.BottomRightCutEnabled = true
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNotNil(BackgroundCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Top_Left"],"Cut doesn't exist.")
+	self:AssertNotNil(BorderCutFrame.__PersistentCuts["Bottom_Right"],"Cut doesn't exist.")
+end))
+
 
 
 return true
