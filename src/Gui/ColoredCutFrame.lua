@@ -56,7 +56,6 @@ function ColoredCutFrame:__SetGradient(Frame,Start,End)
 	end
 
 	--Create the keypoints.
-	local KeypointsMap = {}
 	local Keypoints = {}
 	local ColorKeypoints = self.BackgroundColor3.Keypoints
 	for i = 1,#ColorKeypoints - 1 do
@@ -84,6 +83,12 @@ function ColoredCutFrame:__SetGradient(Frame,Start,End)
 	end
 
 	--Set the colors.
+	if #Keypoints == 0 then
+		table.insert(Keypoints,ColorKeypoints[1])
+	end
+	if Keypoints[#Keypoints].Time ~= 1 then
+		table.insert(Keypoints,ColorSequenceKeypoint.new(1,Keypoints[#Keypoints].Value))
+	end
 	UIGradient.Color = ColorSequence.new(Keypoints)
 end
 
