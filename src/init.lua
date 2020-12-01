@@ -98,10 +98,13 @@ function NexusButton:__new()
 	--Create the button as the adorn frame.
 	local AdornButton = BaseButton.new()
 	local AdornFrame = AdornButton.BaseFrame
-	AdornFrame.BackgroundTransparency = 1
+	local LogicalAdornFrame = AdornButton.LogicalFrame
+	LogicalAdornFrame.BackgroundTransparency = 1
 	self.AdornButton = AdornButton
 	self.AdornFrame = AdornFrame
+	self.LogicalAdornFrame = LogicalAdornFrame
 	rawset(self.object,"AdornFrame",self.AdornFrame)
+	rawset(self.object,"LogicalAdornFrame",self.LogicalAdornFrame)
 	
 	--Create the border adorn and cut frames.
 	local BorderAdorn = Instance.new("Frame")
@@ -133,12 +136,12 @@ function NexusButton:__new()
 	self.BackgroundCutFrame.ZIndex = 2
 	
 	--Set up the events.
-	table.insert(self.__Events,AdornFrame.MouseEnter:Connect(function()
+	table.insert(self.__Events,LogicalAdornFrame.MouseEnter:Connect(function()
 		self.__Hovered = true
 		self:__UpdateColors()
 	end))
 	
-	table.insert(self.__Events,AdornFrame.MouseLeave:Connect(function()
+	table.insert(self.__Events,LogicalAdornFrame.MouseLeave:Connect(function()
 		self.__Hovered = false
 		self:__UpdateColors()
 	end))
@@ -172,10 +175,10 @@ function NexusButton:__new()
 		end
 		
 		--Replicate to the instance.
-		AdornFrame[PropertyName] = self[PropertyName]
+		LogicalAdornFrame[PropertyName] = self[PropertyName]
 	end))
-	table.insert(self.__Events,AdornFrame.Changed:Connect(function(PropertyName)
-		local ExistingValue,NewProperty = self[PropertyName],AdornFrame[PropertyName]
+	table.insert(self.__Events,LogicalAdornFrame.Changed:Connect(function(PropertyName)
+		local ExistingValue,NewProperty = self[PropertyName],LogicalAdornFrame[PropertyName]
 		if self[PropertyName] ~= nil and ExistingValue ~= NewProperty then
 			self[PropertyName] = NewProperty
 		end
@@ -215,16 +218,16 @@ function NexusButton:__new()
 	end
 	
 	--Set up events.
-	table.insert(self.__Events,AdornFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	table.insert(self.__Events,LogicalAdornFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 		if self.GamepadIcon.IconVisible then
 			self:__UpdateColors()
 		end
 	end))
 	table.insert(self.__Events,BorderAdorn:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		if AdornFrame.AbsoluteSize.Y == 0 or not self.BottomRightCutEnabled then
+		if LogicalAdornFrame.AbsoluteSize.Y == 0 or not self.BottomRightCutEnabled then
 			self.BorderCutFrame:RemoveCut("Bottom","Right")
 		else
-			local BorderSizeRelative = (BorderAdorn.AbsoluteSize.Y/AdornFrame.AbsoluteSize.Y) - 1
+			local BorderSizeRelative = (BorderAdorn.AbsoluteSize.Y/LogicalAdornFrame.AbsoluteSize.Y) - 1
 			local BorderCornerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (1 + BorderSizeRelative)
 			self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(BorderCornerCutRelative,0,BorderCornerCutRelative,0),"RelativeYY")
 		end
@@ -260,11 +263,11 @@ function NexusButton:__createindexmethod(Object,Class,RootClass)
 		end
 		
 		--Return an instance property.
-		local AdornFrame = rawget(Object.object,"AdornFrame")
-		if AdornFrame then
+		local LogicalAdornFrame = rawget(Object.object,"LogicalAdornFrame")
+		if LogicalAdornFrame then
 			--Get the value in a protected call.
 			local Worked,Return = pcall(function()
-				local Value = AdornFrame[Index]
+				local Value = LogicalAdornFrame[Index]
 				if Value ~= nil then
 					return Value
 				end
@@ -296,7 +299,7 @@ function NexusButton:__UpdateColors()
 	
 	--Add the section for the gamepad icon if it is visible.
 	if self.GamepadIcon.IconVisible then
-		local SizeX,SizeY = self.AdornFrame.AbsoluteSize.X,self.AdornFrame.AbsoluteSize.Y
+		local SizeX,SizeY = self.LogicalAdornFrame.AbsoluteSize.X,self.LogicalAdornFrame.AbsoluteSize.Y
 		local ColorPos = 1 - (SizeY/SizeX)
 		
 		if typeof(BackgroundColor3) == "ColorSequence" then
@@ -327,7 +330,7 @@ end
 Updates the cuts.
 --]]
 function NexusButton:__UpdateCuts()
-	local BorderSizeY,BackgroundSizeY = self.BorderAdorn.AbsoluteSize.Y,self.AdornFrame.AbsoluteSize.Y
+	local BorderSizeY,BackgroundSizeY = self.BorderAdorn.AbsoluteSize.Y,self.LogicalAdornFrame.AbsoluteSize.Y
 	
 	--Set the background cuts.
 	local BackgroundInnerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (BackgroundSizeY/BorderSizeY)

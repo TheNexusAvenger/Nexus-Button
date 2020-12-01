@@ -17,10 +17,19 @@ local NexusEventCreator = require(RootModule:WaitForChild("NexusInstance"):WaitF
 local BaseButton = NexusInstance:Extend()
 BaseButton:SetClassName("BaseButton")
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 
 
+
+--[[
+Creates an instance.
+--]]
+local function CreateInstance(InstanceName)
+	local NewInstance = Instance.new(InstanceName)
+	return NewInstance,NewInstance
+end
 
 --[[
 Returns if a string or Enum is equvalent to an Enum.
@@ -28,6 +37,28 @@ Returns if a string or Enum is equvalent to an Enum.
 local function IsEnumEquals(EnumItem,OtherEnumItem)
 	return EnumItem == OtherEnumItem or string.match(tostring(EnumItem),".+%..+%.(.+)") == OtherEnumItem or string.match(tostring(OtherEnumItem),".+%..+%.(.+)") == EnumItem
 end
+
+--[[
+Updates the Instance constructor if
+Nexus VR Core is present.
+--]]
+local function UpdateInstanceConstructor()
+	local NexusVRCore = ReplicatedStorage:FindFirstChild("NexusVRCore")
+	if NexusVRCore and BaseButton.InstanceConstructor == CreateInstance then
+		local NexusWrappedInstance = require(NexusVRCore):GetResource("NexusWrappedInstance")
+		BaseButton.InstanceConstructor = function(InstanceName)
+			local NewInstance = NexusWrappedInstance.new(InstanceName)
+			return NewInstance,NewInstance:GetWrappedInstance()
+		end
+	end
+end
+
+
+
+--Connect NexusVRCore being added.
+BaseButton.InstanceConstructor = CreateInstance
+ReplicatedStorage.ChildAdded:Connect(UpdateInstanceConstructor)
+UpdateInstanceConstructor()
 
 
 
@@ -38,7 +69,8 @@ function BaseButton:__new()
 	self:InitializeSuper()
 
 	--Create the base frame.
-	local BaseFrame = Instance.new("Frame")
+	local LogicalFrame,BaseFrame = self.InstanceConstructor("Frame")
+	self.LogicalFrame = LogicalFrame
 	self.BaseFrame = BaseFrame
 	
 	--Create the events.
@@ -55,7 +87,7 @@ function BaseButton:__new()
 	self.__MappedInputs = {}
 	
 	--Set up clicking.
-	table.insert(self.__Events,BaseFrame.InputBegan:Connect(function(Input,Processed)
+	table.insert(self.__Events,LogicalFrame.InputBegan:Connect(function(Input,Processed)
 		if Processed then return end
 		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 			self.MouseButton1Down:Fire()
@@ -66,7 +98,7 @@ function BaseButton:__new()
 		end
 	end))
 	
-	table.insert(self.__Events,BaseFrame.InputEnded:Connect(function(Input,Processed)
+	table.insert(self.__Events,LogicalFrame.InputEnded:Connect(function(Input,Processed)
 		if Processed then return end
 		if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 			self.MouseButton1Up:Fire()
@@ -209,6 +241,7 @@ function BaseButton:Destroy()
 	self.__Events = {}
 	
 	--Destroy the frame.
+	self.LogicalFrame:Destroy()
 	self.BaseFrame:Destroy()
 	
 	--Disconnect the custom events.
