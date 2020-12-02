@@ -163,7 +163,7 @@ function BaseButton:__new()
 	table.insert(self.__Events,UserInputService.InputChanged:Connect(function(Input)
 		if Input.KeyCode == Enum.KeyCode.ButtonR2 then
 			local NewTriggerDown = (Input.Position.Z >= TRIGGER_PRESS_THRESHOLD)
-			if GuiService.SelectedObject == self.PositionAdorn and NewTriggerDown ~= InputsDown[Input.KeyCode] then
+			if GuiService.SelectedObject == self.BaseFrame and NewTriggerDown ~= InputsDown[Input.KeyCode] then
 				InputsDown[Input.KeyCode] = NewTriggerDown
 				
 				--Fire the events.
