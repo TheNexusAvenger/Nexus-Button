@@ -312,9 +312,9 @@ function CutFrame:__CutCorner(HorizontalSideName,VerticalSideName,CutSize,Constr
 	--Change the scales if the constraint is specified.
 	local SizeX,SizeY = self.AdornFrame.AbsoluteSize.X,self.AdornFrame.AbsoluteSize.Y
 	if Constraint == Enum.SizeConstraint.RelativeXX or Constraint == "RelativeXX" then
-		VerticalScale = VerticalScale * (SizeX/SizeY)
+		VerticalScale = VerticalScale * (SizeY == 0 and 0 or (SizeX/SizeY))
 	elseif Constraint == Enum.SizeConstraint.RelativeYY or Constraint == "RelativeYY" then
-		HorizontalScale = HorizontalScale * (SizeY/SizeX)
+		HorizontalScale = HorizontalScale * (SizeX == 0 and 0 or (SizeY/SizeX))
 	end
 	
 	--Set the sides.
