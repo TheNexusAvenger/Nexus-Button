@@ -166,17 +166,22 @@ function NexusButton:__new()
     
     --Set up replication.
     local CustomReplication = {}
-    table.insert(self.__Events,self.Changed:Connect(function(PropertyName)
+    local Metatable = getmetatable(self.object)
+    local BaseNewIndex = Metatable.__newindex
+    Metatable.__newindex = function(Object,Index,Value)
+        --Set the new value.
+        BaseNewIndex(Object,Index,Value)
+        
         --Fire a custtom replication method.
-        local ReplicationMethod = CustomReplication[PropertyName]
+        local ReplicationMethod = CustomReplication[Index]
         if ReplicationMethod then
             ReplicationMethod()
             return
         end
-        
+
         --Replicate to the instance.
-        LogicalAdornFrame[PropertyName] = self[PropertyName]
-    end))
+        LogicalAdornFrame[Index] = self[Index]
+    end
     table.insert(self.__Events,LogicalAdornFrame.Changed:Connect(function(PropertyName)
         local ExistingValue,NewProperty = self[PropertyName],LogicalAdornFrame[PropertyName]
         if self[PropertyName] ~= nil and ExistingValue ~= NewProperty then
@@ -187,6 +192,7 @@ function NexusButton:__new()
     --Add custom replication overrides.
     CustomReplication["__Hovered"] = function() end
     CustomReplication["__Clicked"] = function() end
+    CustomReplication["__Events"] = function() end
     CustomReplication["AutoButtonColor"] = function()
         self:__UpdateColors()
     end
