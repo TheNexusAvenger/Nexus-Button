@@ -65,14 +65,14 @@ local Button = NexusButton.new()
 Button.Size = UDim2.new(0,200,0,40)
 Button.Position = UDim2.new(0,50,0,50)
 Button.BackgroundColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-	ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
+    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
 })
 Button.BorderColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-	ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
+    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
 })
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
@@ -97,14 +97,14 @@ local Button = NexusButton.new()
 Button.Size = UDim2.new(0,200,0,40)
 Button.Position = UDim2.new(0,50,0,50)
 Button.BackgroundColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-	ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
+    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
 })
 Button.BorderColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-	ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
+    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
 })
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
@@ -144,14 +144,14 @@ local Button = NexusButton.new()
 Button.Size = UDim2.new(0,200,0,40)
 Button.Position = UDim2.new(0,50,0,50)
 Button.BackgroundColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-	ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
+    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
 })
 Button.BorderColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-	ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
+    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
 })
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
@@ -176,11 +176,11 @@ TextLabel.Parent = Button:GetAdornFrame()
 
 --Connect the events.
 Button.MouseButton1Down:Connect(function()
-	print("Mouse button 1 down.")
+    print("Mouse button 1 down.")
 end)
 
 Button.MouseButton1Up:Connect(function()
-	print("Mouse button 1 up.")
+    print("Mouse button 1 up.")
 end)
 ```
 

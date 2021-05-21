@@ -56,11 +56,11 @@ AdornFrame.Parent = ScreenGui
 --Create a CutFrame.
 local CutFrame = ColoredCutFrame.new(AdornFrame)
 CutFrame.BackgroundColor3 = ColorSequence.new({
-	ColorSequenceKeypoint.new(0,Color3.new(1,0,0)),
-	ColorSequenceKeypoint.new(0.2,Color3.new(0,1,0)),
-	ColorSequenceKeypoint.new(0.5,Color3.new(0,0,1)),
-	ColorSequenceKeypoint.new(0.8,Color3.new(1,1,1)),
-	ColorSequenceKeypoint.new(1,Color3.new(0,0,0)),
+    ColorSequenceKeypoint.new(0,Color3.new(1,0,0)),
+    ColorSequenceKeypoint.new(0.2,Color3.new(0,1,0)),
+    ColorSequenceKeypoint.new(0.5,Color3.new(0,0,1)),
+    ColorSequenceKeypoint.new(0.8,Color3.new(1,1,1)),
+    ColorSequenceKeypoint.new(1,Color3.new(0,0,0)),
 })
 CutFrame.BackgroundTransparency = 0.25
 CutFrame.ZIndex = 4
