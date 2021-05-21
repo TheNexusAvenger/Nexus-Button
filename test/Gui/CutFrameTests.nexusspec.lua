@@ -103,6 +103,7 @@ NexusUnitTesting:RegisterUnitTest(CutFrameTest.new("CutCornerResize"):SetRun(fun
     
     --Run the assertions.
     Frame.Size = UDim2.new(0,100,0,400)
+    wait()
     self:AssertEquals(CuT.CutPoints.Top.Point1,UDim.new(0.4,0),"Points not properly cut.")
     self:AssertEquals(CuT.CutPoints.Left.Point1,UDim.new(0.1,0),"Points not properly cut.")
 end))
@@ -121,18 +122,22 @@ NexusUnitTesting:RegisterUnitTest(CutFrameTest.new("CutCornerEfficiencyAsymmetic
     
     --Test 1 cut.
     CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),1 + 2,"Frame count not efficient.")
     
     --Test 2 cuts.
     CuT:CutCorner("Top","Right",UDim2.new(0.2,0,0.2,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),2 + 3,"Frame count not efficient.")
     
     --Test 3 cuts.
     CuT:CutCorner("Bottom","Left",UDim2.new(0.3,0,0.3,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),3 + 4,"Frame count not efficient.")
     
     --Test 4 cuts.
     CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),4 + 5,"Frame count not efficient.")
 end))
 
@@ -150,18 +155,22 @@ NexusUnitTesting:RegisterUnitTest(CutFrameTest.new("CutCornerEfficiencySymmetic"
     
     --Test 1 cut.
     CuT:CutCorner("Top","Left",UDim2.new(0.1,0,0.1,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),1 + 2,"Frame count not efficient.")
     
     --Test 2 cuts.
     CuT:CutCorner("Top","Right",UDim2.new(0.1,0,0.1,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),2 + 2,"Frame count not efficient.")
     
     --Test 3 cuts.
     CuT:CutCorner("Bottom","Left",UDim2.new(0.1,0,0.1,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),3 + 3,"Frame count not efficient.")
     
     --Test 4 cuts.
     CuT:CutCorner("Bottom","Right",UDim2.new(0.1,0,0.1,0))
+    wait()
     self:AssertEquals(#Frame:GetChildren(),4 + 3,"Frame count not efficient.")
 end))
 

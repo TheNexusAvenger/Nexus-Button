@@ -60,6 +60,7 @@ NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("Replication"):SetRun(func
     AdornFrame.Name = "Test2"
     AdornFrame.Size = UDim2.new(5,6,7,8)
     AdornFrame.Parent = nil
+    wait()
     self:AssertEquals(self.CuT.Name,"Test2","Name wasn't replicated correctly.")
     self:AssertEquals(self.CuT.Size,UDim2.new(5,6,7,8),"Size wasn't replicated correctly.")
     self:AssertEquals(self.CuT.Parent,nil,"Parent wasn't replicated correctly.")
@@ -166,6 +167,7 @@ NexusUnitTesting:RegisterUnitTest(NexusButtonTest.new("ControllerColors"):SetRun
     
     --Hide the controller icon and assert the color was reverted.
     GamepadIcon.IconVisible = false
+    wait()
     self:AssertEquals(BackgroundCutFrame.BackgroundColor3,SingleColor,"Background color is incorrect.")
 end))
 

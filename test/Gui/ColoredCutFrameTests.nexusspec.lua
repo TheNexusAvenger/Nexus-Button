@@ -186,6 +186,7 @@ NexusUnitTesting:RegisterUnitTest(ColoredCutFrameTest.new("BackgroundColor3Color
     })
     CuT:CutCorner("Bottom","Left",UDim2.new(0.5,0,0.3,0))
     CuT:CutCorner("Bottom","Right",UDim2.new(0.4,0,0.4,0))
+    wait()
     
     --Run the assertions.
     self:AssertEquals(#CuT.TopLeftTriangle:FindFirstChildOfClass("UIGradient").Color.Keypoints,2)
