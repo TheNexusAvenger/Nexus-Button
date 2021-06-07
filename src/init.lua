@@ -301,16 +301,18 @@ function NexusButton:__UpdateColors()
     --Add the section for the gamepad icon if it is visible.
     if self.GamepadIcon.IconVisible then
         local SizeX,SizeY = self.LogicalAdornFrame.AbsoluteSize.X,self.LogicalAdornFrame.AbsoluteSize.Y
-        local ColorPos = 1 - (SizeY/SizeX)
+        local ColorPos = 1 - (SizeY/(SizeX ~= 0 and SizeX or 1))
         
         if typeof(BackgroundColor3) == "ColorSequence" then
             BackgroundColor3 = TruncateColorSequence(BackgroundColor3,ColorPos,CONTROLLER_SECTION_COLOR)
         elseif typeof(BackgroundColor3) == "Color3" then
-            BackgroundColor3 = ColorSequence.new({
-                ColorSequenceKeypoint.new(0,BackgroundColor3),
-                ColorSequenceKeypoint.new(ColorPos,CONTROLLER_SECTION_COLOR),
-                ColorSequenceKeypoint.new(1,CONTROLLER_SECTION_COLOR),
-            })
+            if ColorPos ~= 0 and ColorPos ~= 1 then
+                BackgroundColor3 = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0,BackgroundColor3),
+                    ColorSequenceKeypoint.new(ColorPos,CONTROLLER_SECTION_COLOR),
+                    ColorSequenceKeypoint.new(1,CONTROLLER_SECTION_COLOR),
+                })
+            end
         end
     end
     
