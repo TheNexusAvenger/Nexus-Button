@@ -12,7 +12,7 @@ local TRIGGER_PRESS_THRESHOLD = 0.9
 local RootModule = script.Parent.Parent
 
 local NexusInstance = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
-local NexusEventCreator = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("Event"):WaitForChild("NexusEventCreator"))
+local NexusEvent = require(RootModule:WaitForChild("NexusInstance"):WaitForChild("Event"):WaitForChild("NexusEvent"))
 
 local BaseButton = NexusInstance:Extend()
 BaseButton:SetClassName("BaseButton")
@@ -74,12 +74,12 @@ function BaseButton:__new()
     self.BaseFrame = BaseFrame
     
     --Create the events.
-    self.MouseButton1Down = NexusEventCreator.CreateEvent()
-    self.MouseButton1Up = NexusEventCreator.CreateEvent()
-    self.MouseButton1Click = NexusEventCreator.CreateEvent()
-    self.MouseButton2Down = NexusEventCreator.CreateEvent()
-    self.MouseButton2Up = NexusEventCreator.CreateEvent()
-    self.MouseButton2Click = NexusEventCreator.CreateEvent()
+    self.MouseButton1Down = NexusEvent.new()
+    self.MouseButton1Up = NexusEvent.new()
+    self.MouseButton1Click = NexusEvent.new()
+    self.MouseButton2Down = NexusEvent.new()
+    self.MouseButton2Up = NexusEvent.new()
+    self.MouseButton2Click = NexusEvent.new()
     
     --Set up the events.
     local InputsDown = {}
