@@ -1,18 +1,9 @@
 {
-    "name": "Repository",
+    "name": "NexusButton",
     "tree": {
-        "$className": "DataModel",
-        "ReplicatedStorage": {
-            "$className": "ReplicatedStorage",
-            "NexusButton": {
-              "$path": "src",
-              "NexusInstance": {
-                "$path": "module/NexusInstance/src"
-              }
-            },
-            "NexusButtonTests.nexusspec": {
-              "$path": "test"
-            }
+        "$path": "src",
+        "NexusInstance": {
+            "$path": "module/NexusInstance/"
         }
     }
 }

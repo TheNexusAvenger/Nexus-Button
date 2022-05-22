@@ -1,0 +1,15 @@
+{
+    "name": "Nexus-Button",
+    "tree": {
+        "$className": "DataModel",
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "NexusButton": {
+                "$path": "."
+            },
+            "NexusButtonTests.nexusspec": {
+                "$path": "test"
+            }
+        }
+    }
+}
