@@ -34,7 +34,7 @@ function ThemedFrame:__new()
     end
     self:DisableChangeReplication("BackgroundTransparency")
     ButtonPropertyOverrides["BackgroundTransparency"] = function(NewBackgroundTransparency: Color3)
-        self.BackgroundTransparency = NewBackgroundTransparency
+        self.ImageTransparency = NewBackgroundTransparency
     end
     self:DisableChangeReplication("SliceScaleMultiplier")
     ButtonPropertyOverrides["SliceScaleMultiplier"] = function()
