@@ -12,12 +12,36 @@ local CONTROLLER_SECTION_COLOR = Color3.new(50 / 255, 50 / 255, 50 / 255)
 local DEFAULT_THEMES = {
     CutCorners = {
         MainButton = {
-            Image = "rbxassetid://9704724493",
+            Image = "rbxassetid://9708818802",
             SliceCenter = Rect.new(500, 500, 524, 524),
             SliceScaleMultiplier = 0.2 / 500,
         },
         GamepadIconBackground = {
-            Image = "rbxassetid://9704725184",
+            Image = "rbxassetid://9708824372",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+    },
+    CutTopLeftCorner = {
+        MainButton = {
+            Image = "rbxassetid://9708819815",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+        GamepadIconBackground = {
+            Image = "rbxassetid://9708825225",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+    },
+    CutBottomRightCorner = {
+        MainButton = {
+            Image = "rbxassetid://9708824372",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+        GamepadIconBackground = {
+            Image = "rbxassetid://9708824372",
             SliceCenter = Rect.new(500, 500, 524, 524),
             SliceScaleMultiplier = 0.2 / 500,
         },
