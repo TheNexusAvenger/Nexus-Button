@@ -51,35 +51,6 @@ Button.Parent = ScreenGui
 
 ![Base Button](images/nexusbutton/single-colored-button.png)
 
-Both `BackgroundColor3` and `BorderColor3` accept `ColorSequence`s
-as well.
-```lua
-local NexusButton = require(game.ReplicatedStorage:WaitForChild("NexusButton"))
-
---Create a ScreenGui.
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
---Create a button.
-local Button = NexusButton.new()
-Button.Size = UDim2.new(0,200,0,40)
-Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
-})
-Button.BorderColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
-})
-Button.BorderTransparency = 0.25
-Button.Parent = ScreenGui
-```
-
-![Base Button](images/nexusbutton/multi-colored-button.png)
-
 ## Adding Children
 Adding children isn't as straight forward since the class
 is a table. This means direct parenting will result in an error.
@@ -96,16 +67,8 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 local Button = NexusButton.new()
 Button.Size = UDim2.new(0,200,0,40)
 Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
-})
-Button.BorderColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
-})
+Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
+Button.BorderColor3 = Color3.new(0,140/255,225/255)
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
 
@@ -115,6 +78,7 @@ TextLabel.Size = UDim2.new(1,0,0.9,0)
 TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 TextLabel.Position = UDim2.new(0.5,0,0.5,0)
 TextLabel.BackgroundTransparency = 1
+TextLabel.ZIndex = 5
 TextLabel.Font = Enum.Font.SourceSansBold
 TextLabel.TextColor3 = Color3.new(1,1,1)
 TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
@@ -124,7 +88,7 @@ TextLabel.Text = "Button"
 TextLabel.Parent = Button:GetAdornFrame()
 ```
 
-![Base Button](images/nexusbutton/multi-colored-button-with-text.png)
+![Button With Text](images/nexusbutton/button-with-text.png)
 
 ## Controller Icons
 Controller icons can be added to the button using
@@ -143,16 +107,8 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 local Button = NexusButton.new()
 Button.Size = UDim2.new(0,200,0,40)
 Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,170/255,255/255)),
-    ColorSequenceKeypoint.new(0.2,Color3.new(0,170/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,170/255,0)),
-})
-Button.BorderColor3 = ColorSequence.new({
-    ColorSequenceKeypoint.new(0,Color3.new(0,130/255,225/255)),
-    ColorSequenceKeypoint.new(0.1,Color3.new(0,130/255,0)),
-    ColorSequenceKeypoint.new(1,Color3.new(0,130/255,0)),
-})
+Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
+Button.BorderColor3 = Color3.new(0,140/255,225/255)
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
 
@@ -166,6 +122,7 @@ TextLabel.Size = UDim2.new(1,0,0.9,0)
 TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
 TextLabel.Position = UDim2.new(0.5,0,0.5,0)
 TextLabel.BackgroundTransparency = 1
+TextLabel.ZIndex = 5
 TextLabel.Font = Enum.Font.SourceSansBold
 TextLabel.TextColor3 = Color3.new(1,1,1)
 TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
@@ -184,4 +141,43 @@ Button.MouseButton1Up:Connect(function()
 end)
 ```
 
-![Base Button](images/nexusbutton/multi-colored-button-with-controller.png)
+![Button With Controller](images/nexusbutton/button-with-controller.png)
+
+## Themes
+Basic themes are supported by Nexus Button, which
+are used to change the appearance.
+```lua
+local NexusButton = require(game.ReplicatedStorage:WaitForChild("NexusButton"))
+
+--Create a ScreenGui.
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+--Create a button.
+for i, ThemeName in pairs({"CutCorners","CutTopLeftCorner","CutBottomRightCorner","RoundedCorners"}) do
+    local Button = NexusButton.new()
+    Button.Size = UDim2.new(0,350,0,40)
+    Button.Position = UDim2.new(0,50,0,60 * i)
+    Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
+    Button.BorderColor3 = Color3.new(0,140/255,225/255)
+    Button.BorderTransparency = 0.25
+    Button.Theme = ThemeName
+    Button.Parent = ScreenGui
+
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Size = UDim2.new(1,0,0.9,0)
+    TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
+    TextLabel.Position = UDim2.new(0.5,0,0.5,0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.ZIndex = 5
+    TextLabel.Font = Enum.Font.SourceSansBold
+    TextLabel.TextColor3 = Color3.new(1,1,1)
+    TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
+    TextLabel.TextStrokeTransparency = 0
+    TextLabel.TextScaled = true
+    TextLabel.Text = ThemeName
+    TextLabel.Parent = Button:GetAdornFrame()
+end
+```
+
+![Button Themes](images/nexusbutton/button-themes.png)

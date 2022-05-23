@@ -12,11 +12,8 @@ theme:
 nav:
   - Home: index.md
   - Code Examples:
-    - CutFrame: code-examples/cutframe.md
-    - ColoredCutFrame: code-examples/coloredcutframe.md
     - NexusButton: code-examples/nexusbutton.md
     - Factories: code-examples/factories.md
-  - Contributing: contributing.md
 
 markdown_extensions:
   - admonition
