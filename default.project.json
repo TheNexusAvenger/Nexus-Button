@@ -2,8 +2,8 @@
     "name": "NexusButton",
     "tree": {
         "$path": "src",
-        "NexusInstance": {
-            "$path": "module/NexusInstance/"
+        "NexusWrappedInstance": {
+            "$path": "module/Nexus-Wrapped-Instance/"
         }
     }
 }

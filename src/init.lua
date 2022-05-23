@@ -2,27 +2,52 @@
 TheNexusAvenger
 
 Main module representing the button class. This button
-is meant to provide an easy way to make "good looking", 
+is meant to provide an easy way to make "good looking",
 cross platform buttons.
 --]]
 
---The amount cut on the top left and bottom right corners.
-local CORNER_CUT_BACKGROUND_RELATIVE = 0.3
---Color multiplier when hovering.
 local HOVER_COLOR_MULTIPLIER = 0.7
---Color multiplier when clicking.
-local CLICK_COLOR_MULTIPLIER = 1/0.7
---The color of the last section for controllers.
-local CONTROLLER_SECTION_COLOR = Color3.new(50/255,50/255,50/255)
+local PRESS_COLOR_MULTIPLIER = 1 / 0.7
+local CONTROLLER_SECTION_COLOR = Color3.new(50 / 255, 50 / 255, 50 / 255)
+local DEFAULT_THEMES = {
+    CutCorners = {
+        MainButton = {
+            Image = "rbxassetid://9704724493",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+        GamepadIconBackground = {
+            Image = "rbxassetid://9704725184",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+    },
+    RoundedCorners = {
+        MainButton = {
+            Image = "rbxassetid://9704725601",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+        GamepadIconBackground = {
+            Image = "rbxassetid://9704725809",
+            SliceCenter = Rect.new(500, 500, 524, 524),
+            SliceScaleMultiplier = 0.2 / 500,
+        },
+    },
+}
 
 
 
-local ColoredCutFrame = require(script:WaitForChild("Gui"):WaitForChild("ColoredCutFrame"))
-local ControllerIcon = require(script:WaitForChild("Gui"):WaitForChild("ControllerIcon"))
-local BaseButton = require(script:WaitForChild("Gui"):WaitForChild("BaseButton"))
-local NexusInstance = require(script:WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local GuiService = game:GetService("GuiService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
-local NexusButton = NexusInstance:Extend()
+local ControllerIcon = require(script:WaitForChild("ControllerIcon"))
+local NexusWrappedInstance = require(script:WaitForChild("NexusWrappedInstance"))
+
+local NexusButton = NexusWrappedInstance:Extend()
+NexusButton.Themes = DEFAULT_THEMES
 NexusButton:SetClassName("NexusButton")
 
 
@@ -30,385 +55,330 @@ NexusButton:SetClassName("NexusButton")
 --[[
 Multiplies a Color3.
 --]]
-local function MultiplyColor3(Color,Multiplier)
-    --Multiply the R,G,B values.
-    local NewR,NewG,NewB = Color.r * Multiplier,Color.g * Multiplier,Color.b * Multiplier
-    
-    --Clamp the values.
-    NewR = math.clamp(NewR,0,1)
-    NewG = math.clamp(NewG,0,1)
-    NewB = math.clamp(NewB,0,1)
-    
-    --Return the color.
-    return Color3.new(NewR,NewG,NewB)
+local function MultiplyColor3(Color: Color3, Multiplier: number): Color3
+    return Color3.new(math.clamp(Color.R * Multiplier, 0, 1), math.clamp(Color.G * Multiplier, 0, 1), math.clamp(Color.B * Multiplier, 0, 1))
 end
 
 --[[
-Multiplies a ColorSequence.
+Creates an instance.
 --]]
-local function MultiplyColorSequence(Sequence,Multiplier)
-    local Keypoints = {}
-    
-    --Multiply the keypoints.
-    for _,Keypoint in pairs(Sequence.Keypoints) do
-        local MultipliedColor = MultiplyColor3(Keypoint.Value,Multiplier)
-        table.insert(Keypoints,ColorSequenceKeypoint.new(Keypoint.Time,MultipliedColor))
-    end
-    
-    --Return the new color sequence.
-    return ColorSequence.new(Keypoints)
+local function CreateInstance(InstanceName: string): (any, Instance)
+    local NewInstance = Instance.new(InstanceName)
+    return NewInstance, NewInstance
 end
 
 --[[
-Truncates a color sequence at a given time and
-sets the color sequence to the color.
+Updates the Instance constructor if
+Nexus VR Core is present.
 --]]
-local function TruncateColorSequence(Sequence,Time,FinalColor)
-    local Keypoints = {}
-    
-    --Truncate the keypoints.
-    for _,Keypoint in pairs(Sequence.Keypoints) do
-        if Keypoint.Time < Time then
-            table.insert(Keypoints,Keypoint)
+local function UpdateInstanceConstructor()
+    local NexusVRCore = ReplicatedStorage:FindFirstChild("NexusVRCore")
+    if NexusVRCore and NexusButton.InstanceConstructor == CreateInstance then
+        local NexusWrappedInstance = require(NexusVRCore):GetResource("NexusWrappedInstance")
+        NexusButton.InstanceConstructor = function(InstanceName: string): (any, Instance)
+            local NewInstance = NexusWrappedInstance.new(InstanceName)
+            return NewInstance, NewInstance:GetWrappedInstance()
         end
     end
-    
-    --Add the new keypooints.
-    table.insert(Keypoints,ColorSequenceKeypoint.new(Time,FinalColor))
-    table.insert(Keypoints,ColorSequenceKeypoint.new(1,FinalColor))
-    
-    --Return the new color sequence.
-    return ColorSequence.new(Keypoints)
 end
-
-
 
 --[[
 Creates a Nexus Button object.
 --]]
 function NexusButton:__new()
-    self:InitializeSuper()
-    self.__Hovered = false
-    self.__Clicked = false
-    self.BorderSizePixel = 0
-    self.TopLeftCutEnabled = true
-    self.BottomRightCutEnabled = true
-    self.__Events = {}
-    
-    --Create the button as the adorn frame.
-    local AdornButton = BaseButton.new()
-    local AdornFrame = AdornButton.BaseFrame
-    local LogicalAdornFrame = AdornButton.LogicalFrame
-    LogicalAdornFrame.BackgroundTransparency = 1
-    self.AdornButton = AdornButton
-    self.AdornFrame = AdornFrame
-    self.LogicalAdornFrame = LogicalAdornFrame
-    rawset(self.object,"AdornFrame",self.AdornFrame)
-    rawset(self.object,"LogicalAdornFrame",self.LogicalAdornFrame)
-    
-    --Create the border adorn and cut frames.
-    local BorderAdorn = Instance.new("Frame")
-    BorderAdorn.BackgroundTransparency = 1
-    BorderAdorn.Parent = AdornFrame
-    self.BorderAdorn = BorderAdorn
-    
-    --Create the contents adorn.
+    local BaseButton, RawBaseButton = NexusButton.InstanceConstructor("TextButton")
+    self:InitializeSuper(BaseButton)
+
+    --Create the frames.
+    RawBaseButton.BackgroundTransparency = 1
+    RawBaseButton.Text = ""
+
+    local BorderFrame = Instance.new("ImageLabel")
+    BorderFrame.BackgroundTransparency = 1
+    BorderFrame.Parent = RawBaseButton
+    BorderFrame.ScaleType = Enum.ScaleType.Slice
+    BorderFrame.Parent = RawBaseButton
+    self:DisableChangeReplication("BorderFrame")
+    self.BorderFrame = BorderFrame
+
+    local BackgroundFrame = Instance.new("ImageLabel")
+    BackgroundFrame.BackgroundTransparency = 1
+    BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+    BackgroundFrame.ZIndex = 2
+    BackgroundFrame.ScaleType = Enum.ScaleType.Slice
+    BackgroundFrame.Parent = RawBaseButton
+    self:DisableChangeReplication("BackgroundFrame")
+    self.BackgroundFrame = BackgroundFrame
+
+    BackgroundFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        self:UpdateSliceScale()
+        self:UpdateBorder(false)
+    end)
+
     local ContentsAdorn = Instance.new("Frame")
     ContentsAdorn.BackgroundTransparency = 1
-    ContentsAdorn.Size = UDim2.new(1,0,1,0)
-    ContentsAdorn.ZIndex = 5
-    ContentsAdorn.Parent = AdornFrame
+    ContentsAdorn.Size = UDim2.new(1, 0, 1, 0)
+    ContentsAdorn.ZIndex = 3
+    ContentsAdorn.Parent = RawBaseButton
+    self:DisableChangeReplication("ContentsAdorn")
     self.ContentsAdorn = ContentsAdorn
-    
-    --Create the gamepad icon.
+
     local GamepadIcon = ControllerIcon.new()
-    GamepadIcon.AdornFrame.Size = UDim2.new(1,0,1,0)
-    GamepadIcon.AdornFrame.Position = UDim2.new(1,0,0,0)
-    GamepadIcon.AdornFrame.SizeConstraint = "RelativeYY"
-    GamepadIcon.AdornFrame.AnchorPoint = Vector2.new(1,0)
-    GamepadIcon.AdornFrame.ZIndex = 5
-    GamepadIcon.AdornFrame.Parent = AdornFrame
+    GamepadIcon.AdornFrame.ImageColor3 = CONTROLLER_SECTION_COLOR
+    GamepadIcon.AdornFrame.Size = UDim2.new(1, 0, 1, 0)
+    GamepadIcon.AdornFrame.Position = UDim2.new(1, 0, 0, 0)
+    GamepadIcon.AdornFrame.SizeConstraint = Enum.SizeConstraint.RelativeYY
+    GamepadIcon.AdornFrame.AnchorPoint = Vector2.new(1, 0)
+    GamepadIcon.AdornFrame.ZIndex = 4
+    GamepadIcon.AdornFrame.ScaleType = Enum.ScaleType.Slice
+    GamepadIcon.AdornFrame.Parent = RawBaseButton
+    self:DisableChangeReplication("GamepadIcon")
     self.GamepadIcon = GamepadIcon
-    
-    --Create the cut frames.
-    self.BorderCutFrame = ColoredCutFrame.new(BorderAdorn)
-    self.BackgroundCutFrame = ColoredCutFrame.new(AdornFrame)
-    self.BackgroundCutFrame.ZIndex = 2
-    
-    --Set up the events.
-    table.insert(self.__Events,LogicalAdornFrame.MouseEnter:Connect(function()
-        self.__Hovered = true
-        self:__UpdateColors()
-    end))
-    
-    table.insert(self.__Events,LogicalAdornFrame.MouseLeave:Connect(function()
-        self.__Hovered = false
-        self:__UpdateColors()
-    end))
-    
-    table.insert(self.__Events,AdornButton.MouseButton1Down:Connect(function()
-        self.__Clicked = true
-        self:__UpdateColors()
-    end))
-    
-    table.insert(self.__Events,AdornButton.MouseButton1Up:Connect(function()
-        self.__Clicked = false
-        self:__UpdateColors()
-    end))
-    
-    --Remap the events.
-    self.MouseButton1Down = AdornButton.MouseButton1Down
-    self.MouseButton1Click = AdornButton.MouseButton1Click
-    self.MouseButton1Up = AdornButton.MouseButton1Up
-    self.MouseButton2Down = AdornButton.MouseButton2Down
-    self.MouseButton2Click = AdornButton.MouseButton2Click
-    self.MouseButton2Up = AdornButton.MouseButton2Up
-    
-    --Set up replication.
-    local CustomReplication = {}
-    self:AddGenericPropertyFinalizer(function(Index,Value)
-        --Fire a custom replication method.
-        local ReplicationMethod = CustomReplication[Index]
-        if ReplicationMethod then
-            ReplicationMethod()
+
+    --Connect replicating values.
+    local ButtonPropertyOverrides = {}
+    self:DisableChangeReplication("ButtonPropertyOverrides")
+    self.ButtonPropertyOverrides = ButtonPropertyOverrides
+    self:AddGenericPropertyFinalizer(function(PropertyName: string, Value: any)
+        if not ButtonPropertyOverrides[PropertyName] then
             return
         end
-
-        --Replicate to the instance.
-        LogicalAdornFrame[Index] = Value
+        ButtonPropertyOverrides[PropertyName](Value)
     end)
-    table.insert(self.__Events,LogicalAdornFrame.Changed:Connect(function(PropertyName)
-        local ExistingValue,NewProperty = self[PropertyName],LogicalAdornFrame[PropertyName]
-        if self[PropertyName] ~= nil and ExistingValue ~= NewProperty then
-            self[PropertyName] = NewProperty
+
+    --Set the replication overrides.
+    self:DisableChangeReplication("TweenDuration")
+    self:OverrideButtonProperty("BackgroundColor3", function()
+        self:UpdateBorder(false)
+    end)
+    self:OverrideButtonProperty("BackgroundTransparency", function(NewBackgroundTransparency: number)
+        BackgroundFrame.ImageTransparency = NewBackgroundTransparency
+    end)
+    self:OverrideButtonProperty("BorderSize", function()
+        self:UpdateBorder(false)
+    end)
+    self:OverrideButtonProperty("BorderSizePixel", function(NewBorderSizePixel: number)
+        self.BorderSize = UDim.new(0, NewBorderSizePixel)
+    end)
+    self:OverrideButtonProperty("BorderSizeScale", function(NewBorderSizeScale: number)
+        self.BorderSize = UDim.new(NewBorderSizeScale, 0)
+    end)
+    self:OverrideButtonProperty("BorderColor3", function()
+        self:UpdateBorder(false)
+    end)
+    self:OverrideButtonProperty("AutoButtonColor", function()
+        self:UpdateBorder(false)
+    end)
+    self:OverrideButtonProperty("BorderTransparency", function(NewBorderTransparency: number)
+        BorderFrame.ImageTransparency = NewBorderTransparency
+    end)
+    self:OverrideButtonProperty("Hovering", function()
+        self:UpdateBorder(true)
+    end)
+    self:OverrideButtonProperty("Pressed", function()
+        self:UpdateBorder(true)
+    end)
+    self:OverrideButtonProperty("Theme", function()
+        local Theme = NexusButton.Themes[self.Theme]
+        if not Theme then
+            error("Unknown theme: "..tostring(Theme))
+        end
+        BackgroundFrame.Image = Theme.MainButton.Image
+        BackgroundFrame.SliceCenter = Theme.MainButton.SliceCenter
+        BorderFrame.Image = Theme.MainButton.Image
+        BorderFrame.SliceCenter = Theme.MainButton.SliceCenter
+        GamepadIcon.AdornFrame.Image = Theme.GamepadIconBackground.Image
+        GamepadIcon.AdornFrame.SliceCenter = Theme.GamepadIconBackground.SliceCenter
+        self:UpdateSliceScale()
+    end)
+
+    --Connect the events.
+    self:DisableChangeReplication("MappedInputs")
+    self.MappedInputs = {}
+    self:DisableChangeReplication("Events")
+    self.Events = {}
+    self.MouseEnter:Connect(function()
+        self.Hovering = true
+    end)
+    self.MouseLeave:Connect(function()
+        self.Hovering = false
+    end)
+    self.MouseButton1Down:Connect(function()
+        self.Pressed = true
+    end)
+    self.MouseButton1Up:Connect(function()
+        self.Pressed = false
+    end)
+    table.insert(self.Events, GuiService:GetPropertyChangedSignal("SelectedObject"):Connect(function()
+        self:UpdateBorder(true)
+    end))
+    table.insert(self.Events, UserInputService.InputBegan:Connect(function(Input, Processed)
+        if Processed and (GuiService.SelectedObject ~= self:GetWrappedInstance() or Input.KeyCode == Enum.KeyCode.ButtonA) then return end
+        if self.Pressed then return end
+        if not self.MappedInputs[Input.KeyCode] then return end
+
+        local MouseInput = self.MappedInputs[Input.KeyCode]
+        if MouseInput == Enum.UserInputType.MouseButton1 then
+            self.MouseButton1Down:Fire()
+        elseif MouseInput == Enum.UserInputType.MouseButton2 then
+            self.MouseButton2Down:Fire()
         end
     end))
-    
-    --Add custom replication overrides.
-    CustomReplication["__Hovered"] = function() end
-    CustomReplication["__Clicked"] = function() end
-    CustomReplication["__Events"] = function() end
-    CustomReplication["AutoButtonColor"] = function()
-        self:__UpdateColors()
-    end
-    CustomReplication["BackgroundColor3"] = function()
-        self:__UpdateColors()
-    end
-    CustomReplication["BorderColor3"] = function()
-        self.BorderCutFrame.BackgroundColor3 = self.BorderColor3 
-    end
-    CustomReplication["BorderSizePixel"] = function()
-        BorderAdorn.Size = UDim2.new(1,0,1 + self.BorderSizeScale,self.BorderSizePixel)
-        self:__UpdateCuts()
-    end
-    CustomReplication["BorderSizeScale"] = function()
-        BorderAdorn.Size = UDim2.new(1,0,1 + self.BorderSizeScale,self.BorderSizePixel)
-        self:__UpdateCuts()
-    end
-    CustomReplication["BackgroundTransparency"] = function()
-        self.BackgroundCutFrame.BackgroundTransparency = self.BackgroundTransparency
-    end
-    CustomReplication["BorderTransparency"] = function()
-        self.BorderCutFrame.BackgroundTransparency = self.BorderTransparency
-    end
-    CustomReplication["TopLeftCutEnabled"] = function()
-        self:__UpdateCuts()
-    end
-    CustomReplication["BottomRightCutEnabled"] = function()
-        self:__UpdateCuts()
-    end
-    
-    --Set up events.
-    table.insert(self.__Events,LogicalAdornFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-        if self.GamepadIcon.IconVisible then
-            self:__UpdateColors()
+    table.insert(self.Events, UserInputService.InputEnded:Connect(function(Input)
+        if not self.Pressed then return end
+        if not self.MappedInputs[Input.KeyCode] then return end
+
+        local MouseInput = self.MappedInputs[Input.KeyCode]
+        if MouseInput == Enum.UserInputType.MouseButton1 then
+            self.MouseButton1Up:Fire()
+        elseif MouseInput == Enum.UserInputType.MouseButton2 then
+            self.MouseButton2Up:Fire()
         end
     end))
-    table.insert(self.__Events,BorderAdorn:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-        if LogicalAdornFrame.AbsoluteSize.Y == 0 or not self.BottomRightCutEnabled then
-            self.BorderCutFrame:RemoveCut("Bottom","Right")
-        else
-            local BorderSizeRelative = (BorderAdorn.AbsoluteSize.Y/LogicalAdornFrame.AbsoluteSize.Y) - 1
-            local BorderCornerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (1 + BorderSizeRelative)
-            self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(BorderCornerCutRelative,0,BorderCornerCutRelative,0),"RelativeYY")
-        end
-    end))
-    table.insert(self.__Events,GamepadIcon:GetPropertyChangedSignal("IconVisible"):Connect(function()
-        self:__UpdateColors()
-    end))
-    
+
     --Set the defaults.
-    self.Size = UDim2.new(0,200,0,50)
-    self.BackgroundColor3 = Color3.new(0.8,0.8,0.8)
-    self.BorderColor3 = Color3.new(0,0,0)
-    self.BorderSizeScale = 0.2
+    self.Size = UDim2.new(0, 200, 0, 50)
+    self.BackgroundColor3 = Color3.new(0.8, 0.8, 0.8)
     self.BackgroundTransparency = 0
+    self.BorderSize = UDim.new(0.15, 0)
+    self.BorderColor3 = Color3.new(0, 0, 0)
     self.BorderTransparency = 0
     self.AutoButtonColor = true
+    self.Hovering = false
+    self.Pressed = false
+    self.TweenDuration = 0.1
+    self.Theme = "CutCorners"
 end
 
 --[[
-Creates an __index metamethod for an object. Used to
-setup custom indexing.
+Overrides the replication of a property for the button.
 --]]
-function NexusButton:__createindexmethod(Object,Class,RootClass)
-    --Get the base method.
-    local BaseIndexMethod = self.super:__createindexmethod(Object,Class,RootClass)
-    
-    --Return a wrapped method.
-    return function(MethodObject,Index)
-        --Return the base return if it exists.
-        local BaseReturn = BaseIndexMethod(MethodObject,Index)
-        if BaseReturn ~= nil then
-            return BaseReturn
-        end
-        
-        --Return an instance property.
-        local LogicalAdornFrame = rawget(Object.object,"LogicalAdornFrame")
-        if LogicalAdornFrame then
-            --Get the value in a protected call.
-            local Worked,Return = pcall(function()
-                local Value = LogicalAdornFrame[Index]
-                if Value ~= nil then
-                    return Value
-                end
-            end)
-            
-            --Return the value.
-            if Worked and Return ~= nil then
-                return Return
-            end
-        end
-    end
+function NexusButton:OverrideButtonProperty(PropertyName: string, SetFunction: (any) -> nil): nil
+    self:DisableChangeReplication(PropertyName)
+    self.ButtonPropertyOverrides[PropertyName] = SetFunction
 end
 
 --[[
-Updates the colors of the button.
+Updates the slice scales of the background and border.
 --]]
-function NexusButton:__UpdateColors()
+function NexusButton:UpdateSliceScale(): nil
+    local Theme = NexusButton.Themes[self.Theme]
+    local ButtonSize = math.min(self.AbsoluteSize.X, self.AbsoluteSize.Y)
+    local SliceScale = ButtonSize * Theme.MainButton.SliceScaleMultiplier
+    self.BackgroundFrame.SliceScale = SliceScale
+    self.BorderFrame.SliceScale = SliceScale
+    self.GamepadIcon.AdornFrame.SliceScale = SliceScale
+end
+
+--[[
+Updates the background and border properties.
+--]]
+function NexusButton:UpdateBorder(Tween: boolean?): nil
+    --Get the border size.
+    if not self.BorderSize then return end
+    if not self.Theme then return end
+    local ButtonSizeY = self.BackgroundFrame.AbsoluteSize.Y
+    local BorderSize = (ButtonSizeY * self.BorderSize.Scale) + self.BorderSize.Offset
     local BackgroundColor3 = self.BackgroundColor3
-    local ColorMultiplier = 1
-    
-    --Determine the color multiplier.
-    if self.AutoButtonColor then
-        if self.__Clicked then
-            ColorMultiplier = CLICK_COLOR_MULTIPLIER
-        elseif self.__Hovered then
-            ColorMultiplier = HOVER_COLOR_MULTIPLIER
-        end
-    end
-    
-    --Add the section for the gamepad icon if it is visible.
-    if self.GamepadIcon.IconVisible then
-        local SizeX,SizeY = self.LogicalAdornFrame.AbsoluteSize.X,self.LogicalAdornFrame.AbsoluteSize.Y
-        local ColorPos = 1 - (SizeY/(SizeX ~= 0 and SizeX or 1))
-        
-        if typeof(BackgroundColor3) == "ColorSequence" then
-            BackgroundColor3 = TruncateColorSequence(BackgroundColor3,ColorPos,CONTROLLER_SECTION_COLOR)
-        elseif typeof(BackgroundColor3) == "Color3" then
-            if ColorPos ~= 0 and ColorPos ~= 1 then
-                BackgroundColor3 = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0,BackgroundColor3),
-                    ColorSequenceKeypoint.new(ColorPos,CONTROLLER_SECTION_COLOR),
-                    ColorSequenceKeypoint.new(1,CONTROLLER_SECTION_COLOR),
-                })
-            end
-        end
-    end
-    
-    --Multiply the color.
-    if ColorMultiplier ~= 1 then
-        if typeof(BackgroundColor3) == "Color3" then
-            BackgroundColor3 = MultiplyColor3(BackgroundColor3,ColorMultiplier)
-        elseif typeof(BackgroundColor3) == "ColorSequence" then
-            BackgroundColor3 = MultiplyColorSequence(BackgroundColor3,ColorMultiplier)
-        end
-    end
-        
-    --Set the background color.
-    self.BackgroundCutFrame.BackgroundColor3 = BackgroundColor3
-end
+    local BorderColor3 = self.BorderColor3
 
---[[
-Updates the cuts.
---]]
-function NexusButton:__UpdateCuts()
-    local BorderSizeY,BackgroundSizeY = self.BorderAdorn.AbsoluteSize.Y,self.LogicalAdornFrame.AbsoluteSize.Y
-    
-    --Set the background cuts.
-    local BackgroundInnerCutRelative = (CORNER_CUT_BACKGROUND_RELATIVE/math.sqrt(2)) / (BackgroundSizeY/BorderSizeY)
-    if self.BottomRightCutEnabled then
-        self.BackgroundCutFrame:CutCorner("Bottom","Right",UDim2.new(BackgroundInnerCutRelative,0,BackgroundInnerCutRelative,0),"RelativeYY")
-    else
-        self.BackgroundCutFrame:RemoveCut("Bottom","Right")
+    --Modify the properties.
+    if self.AutoButtonColor ~= false then
+        if self.Pressed then
+            BackgroundColor3 = MultiplyColor3(BackgroundColor3, PRESS_COLOR_MULTIPLIER)
+            BorderColor3 = MultiplyColor3(BorderColor3, PRESS_COLOR_MULTIPLIER)
+            BorderSize = BorderSize * 0.25
+        elseif self.Hovering or GuiService.SelectedObject == self:GetWrappedInstance() then
+            BackgroundColor3 = MultiplyColor3(BackgroundColor3, HOVER_COLOR_MULTIPLIER)
+            BorderColor3 = MultiplyColor3(BorderColor3, HOVER_COLOR_MULTIPLIER)
+            BorderSize = BorderSize * 0.75
+        end
     end
-    if self.TopLeftCutEnabled then
-        self.BackgroundCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE,0,CORNER_CUT_BACKGROUND_RELATIVE,0),"RelativeYY")
+
+    --Apply the properties.
+    if Tween and self.TweenDuration and self.TweenDuration > 0 then
+        TweenService:Create(self.BackgroundFrame:GetWrappedInstance(), TweenInfo.new(self.TweenDuration), {
+            ImageColor3 = BackgroundColor3,
+        }):Play()
+        TweenService:Create(self.BorderFrame:GetWrappedInstance(), TweenInfo.new(self.TweenDuration), {
+            ImageColor3 = BorderColor3,
+            Size = UDim2.new(1, 0, 1, BorderSize),
+        }):Play()
     else
-        self.BackgroundCutFrame:RemoveCut("Top","Left")
-    end
-    
-    --Set the border cuts.
-    local BorderMultiplier = BackgroundSizeY/BorderSizeY
-    if self.BottomRightCutEnabled then
-        self.BorderCutFrame:CutCorner("Bottom","Right",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
-    else
-        self.BorderCutFrame:RemoveCut("Bottom","Right")
-    end
-    if self.TopLeftCutEnabled then
-        self.BorderCutFrame:CutCorner("Top","Left",UDim2.new(CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0,CORNER_CUT_BACKGROUND_RELATIVE * BorderMultiplier,0),"RelativeYY")
-    else
-        self.BorderCutFrame:RemoveCut("Top","Left")
+        self.BackgroundFrame.ImageColor3 = BackgroundColor3
+        self.BorderFrame.ImageColor3 = BorderColor3
+        self.BorderFrame.Size = UDim2.new(1, 0, 1, BorderSize)
     end
 end
 
 --[[
 Returns the adorn frame to parent frames to the button.
 --]]
-function NexusButton:GetAdornFrame()
-    return self.ContentsAdorn
+function NexusButton:GetAdornFrame(): Frame
+    return self.ContentsAdorn:GetWrappedInstance()
 end
 
 --[[
 Sets the controller icon for the button.
 --]]
-function NexusButton:SetControllerIcon(KeyCode)
+function NexusButton:SetControllerIcon(KeyCode: Enum.KeyCode | string): nil
     self.GamepadIcon:SetIcon(KeyCode)
 end
 
 --[[
 Maps a key input to a mouse input for clicking.
 --]]
-function NexusButton:MapKey(KeyCode,MouseInput)
-    self.AdornButton:MapKey(KeyCode,MouseInput)
+function NexusButton:MapKey(KeyCode: Enum.KeyCode | string, MouseInput: Enum.UserInputType | string): nil
+    --Correct the inputs.
+    if typeof(KeyCode) == "string" then
+        KeyCode = Enum.KeyCode[KeyCode]
+    end
+    if typeof(MouseInput) == "string" then
+        MouseInput = Enum.UserInputType[MouseInput]
+    end
+
+    --Throw an error if the mouse input is invalid.
+    if MouseInput ~= Enum.UserInputType.MouseButton1 and MouseInput ~= Enum.UserInputType.MouseButton2 then
+        error("Mouse input must be either MouseButton1 or MouseButton2.")
+    end
+
+    --Store the mapped input.
+    self.MappedInputs[KeyCode] = MouseInput
 end
 
 --[[
 Unmaps a key input to a mouse input for clicking.
 --]]
-function NexusButton:UnmapKey(KeyCode)
-    self.AdornButton:UnmapKey(KeyCode)
+function NexusButton:UnmapKey(KeyCode: Enum.KeyCode | string): nil
+    --Correct the input.
+    if typeof(KeyCode) == "string" then
+        KeyCode = Enum.KeyCode[KeyCode]
+    end
+
+    --Remove the mapped input.
+    self.MappedInputs[KeyCode] = nil
 end
 
 --[[
-Destroys the frame and disconnects the events.
+Destroys the button and disconnects the events.
 --]]
-function NexusButton:Destroy()
+function NexusButton:Destroy(): nil
     self.super:Destroy()
-    
+    self.GamepadIcon:Destroy()
+
     --Disconnect the events.
-    for _,Event in pairs(self.__Events) do
+    for _, Event in pairs(self.Events) do
         Event:Disconnect()
     end
-    self.__Events = {}
-    
-    --Destory the frames.
-    self.BackgroundCutFrame:Destroy()
-    self.BorderCutFrame:Destroy()
-    self.GamepadIcon:Destroy()
-    self.AdornButton:Destroy()
+    self.Events = {}
 end
 
+
+
+--Connect NexusVRCore being added.
+NexusButton.InstanceConstructor = CreateInstance
+ReplicatedStorage.ChildAdded:Connect(UpdateInstanceConstructor)
+UpdateInstanceConstructor()
 
 
 
