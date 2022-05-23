@@ -178,10 +178,10 @@ function NexusButton:__new()
     self:OverrideButtonProperty("Pressed", function()
         self:UpdateBorder(true)
     end)
-    self:OverrideButtonProperty("Theme", function()
-        local Theme = NexusButton.Themes[self.Theme]
+    self:OverrideButtonProperty("Theme", function(NewTheme: string)
+        local Theme = NexusButton.Themes[NewTheme]
         if not Theme then
-            error("Unknown theme: "..tostring(Theme))
+            error("Unknown theme: "..tostring(NewTheme))
         end
         BackgroundFrame.Image = Theme.MainButton.Image
         BackgroundFrame.SliceCenter = Theme.MainButton.SliceCenter
