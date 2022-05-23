@@ -255,8 +255,10 @@ function NexusButton:__new()
         local MouseInput = self.MappedInputs[Input.KeyCode]
         if MouseInput == Enum.UserInputType.MouseButton1 then
             self.MouseButton1Up:Fire()
+            self.MouseButton1Click:Fire()
         elseif MouseInput == Enum.UserInputType.MouseButton2 then
             self.MouseButton2Up:Fire()
+            self.MouseButton2Click:Fire()
         end
     end))
 
