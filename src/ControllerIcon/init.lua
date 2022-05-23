@@ -53,6 +53,7 @@ Updates the visibility of the icon.
 function ControllerIcon:UpdateVisibility(): nil
     --Set the visibility to false if there is no icon.
     if not self.Icon then
+        self.AdornFrame.Visible = false
         self.IconVisible = false
         return
     end
