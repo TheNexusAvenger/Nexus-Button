@@ -84,44 +84,20 @@ local function MultiplyColor3(Color: Color3, Multiplier: number): Color3
 end
 
 --[[
-Creates an instance.
---]]
-local function CreateInstance(InstanceName: string): (any, Instance)
-    local NewInstance = Instance.new(InstanceName)
-    return NewInstance, NewInstance
-end
-
---[[
-Updates the Instance constructor if
-Nexus VR Core is present.
---]]
-local function UpdateInstanceConstructor()
-    local NexusVRCore = ReplicatedStorage:FindFirstChild("NexusVRCore")
-    if NexusVRCore and NexusButton.InstanceConstructor == CreateInstance then
-        local NexusWrappedInstance = require(NexusVRCore):GetResource("NexusWrappedInstance")
-        NexusButton.InstanceConstructor = function(InstanceName: string): (any, Instance)
-            local NewInstance = NexusWrappedInstance.new(InstanceName)
-            return NewInstance, NewInstance:GetWrappedInstance()
-        end
-    end
-end
-
---[[
 Creates a Nexus Button object.
 --]]
 function NexusButton:__new()
-    local BaseButton, RawBaseButton = NexusButton.InstanceConstructor("TextButton")
-    self:InitializeSuper(BaseButton)
+    self:InitializeSuper("TextButton")
 
     --Create the frames.
-    RawBaseButton.BackgroundTransparency = 1
-    RawBaseButton.Text = ""
+    local BaseButton = self:GetWrappedInstance()
+    BaseButton.BackgroundTransparency = 1
+    BaseButton.Text = ""
 
     local BorderFrame = Instance.new("ImageLabel")
     BorderFrame.BackgroundTransparency = 1
-    BorderFrame.Parent = RawBaseButton
     BorderFrame.ScaleType = Enum.ScaleType.Slice
-    BorderFrame.Parent = RawBaseButton
+    BorderFrame.Parent = BaseButton
     self:DisableChangeReplication("BorderFrame")
     self.BorderFrame = BorderFrame
 
@@ -130,7 +106,7 @@ function NexusButton:__new()
     BackgroundFrame.Size = UDim2.new(1, 0, 1, 0)
     BackgroundFrame.ZIndex = 2
     BackgroundFrame.ScaleType = Enum.ScaleType.Slice
-    BackgroundFrame.Parent = RawBaseButton
+    BackgroundFrame.Parent = BaseButton
     self:DisableChangeReplication("BackgroundFrame")
     self.BackgroundFrame = BackgroundFrame
 
@@ -143,7 +119,7 @@ function NexusButton:__new()
     ContentsAdorn.BackgroundTransparency = 1
     ContentsAdorn.Size = UDim2.new(1, 0, 1, 0)
     ContentsAdorn.ZIndex = 3
-    ContentsAdorn.Parent = RawBaseButton
+    ContentsAdorn.Parent = BaseButton
     self:DisableChangeReplication("ContentsAdorn")
     self.ContentsAdorn = ContentsAdorn
 
@@ -155,7 +131,7 @@ function NexusButton:__new()
     GamepadIcon.AdornFrame.AnchorPoint = Vector2.new(1, 0)
     GamepadIcon.AdornFrame.ZIndex = 4
     GamepadIcon.AdornFrame.ScaleType = Enum.ScaleType.Slice
-    GamepadIcon.AdornFrame.Parent = RawBaseButton
+    GamepadIcon.AdornFrame.Parent = BaseButton
     self:DisableChangeReplication("GamepadIcon")
     self.GamepadIcon = GamepadIcon
 
@@ -398,13 +374,6 @@ function NexusButton:Destroy(): nil
     end
     self.Events = {}
 end
-
-
-
---Connect NexusVRCore being added.
-NexusButton.InstanceConstructor = CreateInstance
-ReplicatedStorage.ChildAdded:Connect(UpdateInstanceConstructor)
-UpdateInstanceConstructor()
 
 
 
