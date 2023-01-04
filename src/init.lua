@@ -90,6 +90,7 @@ export type NexusButton = {
     new: () -> NexusButton,
     Extend: (self: NexusButton) -> NexusButton,
 
+    BorderSizeScale: number,
     TweenDuration: number,
     Theme: string,
     OverrideButtonProperty: (self: NexusButton, PropertyName: string, SetFunction: (any) -> ()) -> (),

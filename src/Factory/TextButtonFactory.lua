@@ -12,6 +12,7 @@ local BORDER_COLOR_OFFSET = Color3.new(-30 / 255, -30 / 255, -30 / 255)
 
 local RootModule = script.Parent.Parent
 
+local NexusButton = require(RootModule)
 local ButtonFactory = require(RootModule:WaitForChild("Factory"):WaitForChild("ButtonFactory"))
 
 local TextButtonFactory = ButtonFactory:Extend()
@@ -22,6 +23,7 @@ export type TextButtonFactory = {
     Extend: (self: TextButtonFactory) -> TextButtonFactory,
     CreateDefault: (Color: Color3) -> TextButtonFactory,
 
+    Create: (self: TextButtonFactory) -> (NexusButton.NexusButton, TextLabel),
     SetTextDefault: (self: TextButtonFactory, PropertyName: string, Property: any) -> (),
     UnsetTextDefault: (self: TextButtonFactory, PropertyName: string) -> (),
 } & ButtonFactory.ButtonFactory
