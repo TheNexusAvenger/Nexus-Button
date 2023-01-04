@@ -31,7 +31,7 @@ Test that the CreateDefault method.
 --]]
 NexusUnitTesting:RegisterUnitTest(ButtonFactoryTest.new("CreateDefault"):SetRun(function(self)
     --Create the component under testing.
-    local CuT = ButtonFactory.CreateDefault(Color3.new(0,170/255,1))
+    local CuT = ButtonFactory.CreateDefault(Color3.new(0, 170 / 255, 1))
 
     --Create a button and assert the defaults are correct.
     local Button = CuT:Create()

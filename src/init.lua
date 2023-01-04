@@ -5,6 +5,7 @@ Main module representing the button class. This button
 is meant to provide an easy way to make "good looking",
 cross platform buttons.
 --]]
+--!strict
 
 local HOVER_COLOR_MULTIPLIER = 0.7
 local PRESS_COLOR_MULTIPLIER = 1 / 0.7
@@ -73,6 +74,31 @@ local NexusButton = NexusWrappedInstance:Extend()
 NexusButton.Themes = DEFAULT_THEMES
 NexusButton:SetClassName("NexusButton")
 
+export type NexusButtonTheme = {
+    MainButton: {
+        Image: string,
+        SliceCenter: Rect,
+        SliceScaleMultiplier: number,
+    },
+    GamepadIconBackground: {
+        Image: string,
+        SliceCenter: Rect,
+        SliceScaleMultiplier: number,
+    },
+}
+export type NexusButton = {
+    new: () -> NexusButton,
+    Extend: (self: NexusButton) -> NexusButton,
+
+    TweenDuration: number,
+    Theme: string,
+    OverrideButtonProperty: (self: NexusButton, PropertyName: string, SetFunction: (any) -> ()) -> (),
+    GetAdornFrame: (self: NexusButton) -> Frame,
+    SetControllerIcon: (self: NexusButton, KeyCode: Enum.KeyCode | string) -> (),
+    MapKey: (self: NexusButton, KeyCode: Enum.KeyCode | string, MouseInput: Enum.UserInputType | string) -> (),
+    UnmapKey: (KeyCode: Enum.KeyCode | string) -> (),
+} & NexusWrappedInstance.NexusWrappedInstance & TextButton
+
 
 
 --[[
@@ -85,7 +111,7 @@ end
 --[[
 Creates a Nexus Button object.
 --]]
-function NexusButton:__new()
+function NexusButton:__new(): ()
     NexusWrappedInstance.__new(self, "TextButton")
 
     --Create the frames.
@@ -254,7 +280,7 @@ end
 --[[
 Overrides the replication of a property for the button.
 --]]
-function NexusButton:OverrideButtonProperty(PropertyName: string, SetFunction: (any) -> nil): nil
+function NexusButton:OverrideButtonProperty(PropertyName: string, SetFunction: (any) -> ()): ()
     self:DisableChangeReplication(PropertyName)
     self.ButtonPropertyOverrides[PropertyName] = SetFunction
 end
@@ -262,7 +288,7 @@ end
 --[[
 Updates the slice scales of the background and border.
 --]]
-function NexusButton:UpdateSliceScale(): nil
+function NexusButton:UpdateSliceScale(): ()
     local Theme = NexusButton.Themes[self.Theme]
     local ButtonSize = math.min(self.AbsoluteSize.X, self.AbsoluteSize.Y)
     local SliceScale = ButtonSize * Theme.MainButton.SliceScaleMultiplier
@@ -274,7 +300,7 @@ end
 --[[
 Updates the background and border properties.
 --]]
-function NexusButton:UpdateBorder(Tween: boolean?): nil
+function NexusButton:UpdateBorder(Tween: boolean?): ()
     --Get the border size.
     if not self.BorderSize then return end
     if not self.Theme then return end
@@ -322,20 +348,20 @@ end
 --[[
 Sets the controller icon for the button.
 --]]
-function NexusButton:SetControllerIcon(KeyCode: Enum.KeyCode | string): nil
+function NexusButton:SetControllerIcon(KeyCode: Enum.KeyCode | string): ()
     self.GamepadIcon:SetIcon(KeyCode)
 end
 
 --[[
 Maps a key input to a mouse input for clicking.
 --]]
-function NexusButton:MapKey(KeyCode: Enum.KeyCode | string, MouseInput: Enum.UserInputType | string): nil
+function NexusButton:MapKey(KeyCode: Enum.KeyCode | string, MouseInput: Enum.UserInputType | string): ()
     --Correct the inputs.
     if typeof(KeyCode) == "string" then
-        KeyCode = Enum.KeyCode[KeyCode]
+        KeyCode = (Enum.KeyCode :: any)[KeyCode]
     end
     if typeof(MouseInput) == "string" then
-        MouseInput = Enum.UserInputType[MouseInput]
+        MouseInput = (Enum.UserInputType :: any)[MouseInput]
     end
 
     --Throw an error if the mouse input is invalid.
@@ -350,10 +376,10 @@ end
 --[[
 Unmaps a key input to a mouse input for clicking.
 --]]
-function NexusButton:UnmapKey(KeyCode: Enum.KeyCode | string): nil
+function NexusButton:UnmapKey(KeyCode: Enum.KeyCode | string): ()
     --Correct the input.
     if typeof(KeyCode) == "string" then
-        KeyCode = Enum.KeyCode[KeyCode]
+        KeyCode = (Enum.KeyCode :: any)[KeyCode]
     end
 
     --Remove the mapped input.
@@ -363,12 +389,12 @@ end
 --[[
 Destroys the button and disconnects the events.
 --]]
-function NexusButton:Destroy(): nil
+function NexusButton:Destroy(): ()
     NexusWrappedInstance.Destroy(self)
     self.GamepadIcon:Destroy()
 
     --Disconnect the events.
-    for _, Event in pairs(self.Events) do
+    for _, Event in self.Events do
         Event:Disconnect()
     end
     self.Events = {}
@@ -376,4 +402,4 @@ end
 
 
 
-return NexusButton
+return NexusButton :: NexusButton

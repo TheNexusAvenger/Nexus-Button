@@ -10,6 +10,14 @@ local NexusWrappedInstance = require(script.Parent:WaitForChild("NexusWrappedIns
 local ThemedFrame = NexusWrappedInstance:Extend()
 ThemedFrame:SetClassName("ThemedFrame")
 
+export type ThemedFrame = {
+    new: () -> ThemedFrame,
+    Extend: (self: ThemedFrame) -> ThemedFrame,
+
+    Theme: NexusButton.NexusButtonTheme,
+} & "ImageLabel"
+
+
 
 --[[
 Creates the themed frame.
@@ -65,7 +73,7 @@ end
 --[[
 Updates the slice scale of the frame.
 --]]
-function ThemedFrame:UpdateSliceScale(): nil
+function ThemedFrame:UpdateSliceScale(): ()
     if not self.Theme then return end
     local Theme = NexusButton.Themes[self.Theme]
     self.SliceScale = math.min(self.AbsoluteSize.X, self.AbsoluteSize.Y) * Theme.MainButton.SliceScaleMultiplier * (self.SliceScaleMultiplier or 1)
@@ -74,4 +82,4 @@ end
 
 
 
-return ThemedFrame
+return ThemedFrame :: ThemedFrame

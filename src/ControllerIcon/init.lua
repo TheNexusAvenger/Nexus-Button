@@ -3,6 +3,7 @@ TheNexusAvenger
 
 Class representing a controller icon.
 --]]
+--!strict
 
 local BASE_ICON_SIZE_RELATIVE = 0.9
 local CUSTOM_MULTIPLIERS = {
@@ -19,6 +20,14 @@ local NexusInstance = require(script.Parent:WaitForChild("NexusWrappedInstance")
 
 local ControllerIcon = NexusInstance:Extend()
 ControllerIcon:SetClassName("ControllerIcon")
+
+export type ControllerIcon = {
+    new: () -> ControllerIcon,
+    Extend: (self: ControllerIcon) -> ControllerIcon,
+
+    SetIcon: (self: ControllerIcon, KeyCode: Enum.KeyCode | string) -> (),
+    SetScale: (self: ControllerIcon, NewScale: number) -> (),
+} & NexusInstance.NexusInstance
 
 
 
@@ -50,7 +59,7 @@ end
 --[[
 Updates the visibility of the icon.
 --]]
-function ControllerIcon:UpdateVisibility(): nil
+function ControllerIcon:UpdateVisibility(): ()
     --Set the visibility to false if there is no icon.
     if not self.Icon then
         self.AdornFrame.Visible = false
@@ -69,7 +78,7 @@ end
 --[[
 Sets the icon.
 --]]
-function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): nil
+function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): ()
     --Return if the KeyCode is nil.
     if KeyCode == nil then
         self.KeyCode = nil
@@ -81,7 +90,7 @@ function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): nil
 
     --Covert the KeyCode from a string.
     if type(KeyCode) == "string" then
-        KeyCode = Enum.KeyCode[KeyCode]
+        KeyCode = (Enum.KeyCode :: any)[KeyCode]
     end
 
     --Destroy the existing icon.
@@ -104,7 +113,7 @@ end
 --[[
 Sets the scale of the icon.
 --]]
-function ControllerIcon:SetScale(NewScale: number): nil
+function ControllerIcon:SetScale(NewScale: number): ()
     self.IconScale = NewScale
 
     --Set the size.
@@ -117,11 +126,11 @@ end
 --[[
 Destroys the frame.
 --]]
-function ControllerIcon:Destroy(): nil
+function ControllerIcon:Destroy(): ()
     NexusInstance.Destroy(self)
 
     --Disconnect the events.
-    for _,Event in pairs(self.Events) do
+    for _,Event in self.Events do
         Event:Disconnect()
     end
     self.Events = {}
@@ -132,4 +141,4 @@ end
 
 
 
-return ControllerIcon
+return ControllerIcon :: ControllerIcon

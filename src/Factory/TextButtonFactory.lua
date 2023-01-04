@@ -4,6 +4,7 @@ TheNexusAvenger
 "Factory" for creating text buttons. Used to be
 able to set defaults once.
 --]]
+--!strict
 
 local BORDER_COLOR_OFFSET = Color3.new(-30 / 255, -30 / 255, -30 / 255)
 
@@ -15,6 +16,15 @@ local ButtonFactory = require(RootModule:WaitForChild("Factory"):WaitForChild("B
 
 local TextButtonFactory = ButtonFactory:Extend()
 TextButtonFactory:SetClassName("TextButtonFactory")
+
+export type TextButtonFactory = {
+    new: () -> TextButtonFactory,
+    Extend: (self: TextButtonFactory) -> TextButtonFactory,
+    CreateDefault: (Color: Color3) -> TextButtonFactory,
+
+    SetTextDefault: (self: TextButtonFactory, PropertyName: string, Property: any) -> (),
+    UnsetTextDefault: (self: TextButtonFactory, PropertyName: string) -> (),
+} & ButtonFactory.ButtonFactory
 
 
 
@@ -74,8 +84,8 @@ function TextButtonFactory:Create()
     TextLabel.Parent = Button:GetAdornFrame()
 
     --Set the text defaults.
-    for PropertyName,PropertyValue in pairs(self.TextDefaults) do
-        TextLabel[PropertyName] = PropertyValue
+    for PropertyName,PropertyValue in self.TextDefaults do
+        (TextLabel :: any)[PropertyName] = PropertyValue
     end
 
     --Return the button and textlabel.
@@ -85,17 +95,17 @@ end
 --[[
 Sets a default text property.
 --]]
-function ButtonFactory:SetTextDefault(PropertyName: string, Property: any): nil
+function ButtonFactory:SetTextDefault(PropertyName: string, Property: any): ()
     self.TextDefaults[PropertyName] = Property
 end
 
 --[[
 Unsets a default text property.
 --]]
-function ButtonFactory:UnsetTextDefault(PropertyName: string)
+function ButtonFactory:UnsetTextDefault(PropertyName: string): ()
     self.TextDefaults[PropertyName] = nil
 end
 
 
 
-return TextButtonFactory
+return TextButtonFactory :: TextButtonFactory

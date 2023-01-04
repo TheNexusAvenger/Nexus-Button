@@ -4,6 +4,7 @@ TheNexusAvenger
 "Factory" for creating buttons. Used to be able
 to set defaults once.
 --]]
+--!strict
 
 local BORDER_COLOR_OFFSET = Color3.new(-30 / 255, -30 / 255, -30 / 255)
 
@@ -16,6 +17,16 @@ local NexusButton = require(RootModule)
 
 local ButtonFactory = NexusObject:Extend()
 ButtonFactory:SetClassName("ButtonFactory")
+
+export type ButtonFactory = {
+    new: () -> ButtonFactory,
+    Extend: (self: ButtonFactory) -> ButtonFactory,
+    CreateDefault: (Color: Color3) -> ButtonFactory,
+
+    Create: (self: ButtonFactory) -> NexusButton.NexusButton,
+    SetDefault: (self: ButtonFactory, PropertyName: string, Property: any) -> (),
+    UnsetDefault: (self: ButtonFactory, PropertyName: string) -> (),
+} & NexusObject.NexusObject
 
 
 
@@ -56,13 +67,13 @@ end
 --[[
 Creates a button instance.
 --]]
-function ButtonFactory:Create()
+function ButtonFactory:Create(): NexusButton.NexusButton
     --Create the button.
     local Button = NexusButton.new()
 
     --Set the defaults.
-    for PropertyName,PropertyValue in pairs(self.Defaults) do
-        Button[PropertyName] = PropertyValue
+    for PropertyName,PropertyValue in self.Defaults do
+        (Button :: any)[PropertyName] = PropertyValue
     end
 
     --Return the button.
@@ -72,17 +83,17 @@ end
 --[[
 Sets a default property.
 --]]
-function ButtonFactory:SetDefault(PropertyName: string, Property: any): nil
+function ButtonFactory:SetDefault(PropertyName: string, Property: any): ()
     self.Defaults[PropertyName] = Property
 end
 
 --[[
 Unsets a default property.
 --]]
-function ButtonFactory:UnsetDefault(PropertyName: string): nil
+function ButtonFactory:UnsetDefault(PropertyName: string): ()
     self.Defaults[PropertyName] = nil
 end
 
 
 
-return ButtonFactory
+return ButtonFactory :: ButtonFactory

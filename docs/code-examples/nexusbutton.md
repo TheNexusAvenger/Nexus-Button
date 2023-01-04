@@ -154,7 +154,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
 --Create a button.
-for i, ThemeName in pairs({"CutCorners","CutTopLeftCorner","CutBottomRightCorner","RoundedCorners"}) do
+for i, ThemeName in {"CutCorners","CutTopLeftCorner","CutBottomRightCorner","RoundedCorners"} do
     local Button = NexusButton.new()
     Button.Size = UDim2.new(0,350,0,40)
     Button.Position = UDim2.new(0,50,0,60 * i)
