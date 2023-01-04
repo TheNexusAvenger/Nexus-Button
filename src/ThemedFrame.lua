@@ -15,7 +15,7 @@ ThemedFrame:SetClassName("ThemedFrame")
 Creates the themed frame.
 --]]
 function ThemedFrame:__new()
-    self:InitializeSuper("ImageLabel")
+    NexusWrappedInstance.__new(self, "ImageLabel")
     self.BackgroundTransparency = 1
 
     --Connect replicating values.

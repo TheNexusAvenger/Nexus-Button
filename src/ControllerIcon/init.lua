@@ -26,7 +26,7 @@ ControllerIcon:SetClassName("ControllerIcon")
 Constructor of the Controller Icon class.
 --]]
 function ControllerIcon:__new()
-    self:InitializeSuper()
+    NexusInstance.__new(self)
 
     --Create the adorn frame.
     local AdornFrame = Instance.new("ImageLabel")
@@ -118,7 +118,7 @@ end
 Destroys the frame.
 --]]
 function ControllerIcon:Destroy(): nil
-    self.super:Destroy()
+    NexusInstance.Destroy(self)
 
     --Disconnect the events.
     for _,Event in pairs(self.Events) do

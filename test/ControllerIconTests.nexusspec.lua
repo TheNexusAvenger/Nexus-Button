@@ -5,6 +5,7 @@ Unit tests for the ControllerIcon class.
 --]]
 
 local NexusUnitTesting = require("NexusUnitTesting")
+_G.EnsureNexusWrappedInstanceSingleton = false
 
 local NexusButton = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton")
 local ControllerIcon = require(NexusButton:WaitForChild("ControllerIcon"))

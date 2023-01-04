@@ -5,6 +5,7 @@ Unit tests for the NeuxsButton class.
 --]]
 
 local NexusUnitTesting = require("NexusUnitTesting")
+_G.EnsureNexusWrappedInstanceSingleton = false
 
 local NexusButton = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"))
 local NexusButtonTest = NexusUnitTesting.UnitTest:Extend()

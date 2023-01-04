@@ -53,7 +53,7 @@ end
 Creates a text button factory.
 --]]
 function TextButtonFactory:__new()
-    self:InitializeSuper()
+    ButtonFactory.__new(self)
     self.TextDefaults = {}
 end
 
@@ -62,7 +62,7 @@ Creates a text button instance.
 --]]
 function TextButtonFactory:Create()
     --Create the button.
-    local Button = self.super:Create()
+    local Button = ButtonFactory.Create(self)
 
     --Add a text label.
     local TextLabel = Instance.new("TextLabel")

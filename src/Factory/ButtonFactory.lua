@@ -11,10 +11,10 @@ local BORDER_COLOR_OFFSET = Color3.new(-30 / 255, -30 / 255, -30 / 255)
 
 local RootModule = script.Parent.Parent
 
-local NexusInstance = require(RootModule:WaitForChild("NexusWrappedInstance"):WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
+local NexusObject = require(RootModule:WaitForChild("NexusWrappedInstance"):WaitForChild("NexusInstance"):WaitForChild("NexusObject"))
 local NexusButton = require(RootModule)
 
-local ButtonFactory = NexusInstance:Extend()
+local ButtonFactory = NexusObject:Extend()
 ButtonFactory:SetClassName("ButtonFactory")
 
 
@@ -49,7 +49,7 @@ end
 Creates a button factory.
 --]]
 function ButtonFactory:__new()
-    self:InitializeSuper()
+    NexusObject.__new(self)
     self.Defaults = {}
 end
 

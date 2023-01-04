@@ -5,6 +5,7 @@ Unit tests for the TextButtonFactory class.
 --]]
 
 local NexusUnitTesting = require("NexusUnitTesting")
+_G.EnsureNexusWrappedInstanceSingleton = false
 
 local NexusButton = game:GetService("ReplicatedStorage"):WaitForChild("NexusButton")
 local Factory = NexusButton:WaitForChild("Factory")

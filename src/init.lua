@@ -62,7 +62,6 @@ local DEFAULT_THEMES = {
 
 
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GuiService = game:GetService("GuiService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -87,7 +86,7 @@ end
 Creates a Nexus Button object.
 --]]
 function NexusButton:__new()
-    self:InitializeSuper("TextButton")
+    NexusWrappedInstance.__new(self, "TextButton")
 
     --Create the frames.
     local BaseButton = self:GetWrappedInstance()
@@ -365,7 +364,7 @@ end
 Destroys the button and disconnects the events.
 --]]
 function NexusButton:Destroy(): nil
-    self.super:Destroy()
+    NexusWrappedInstance.Destroy(self)
     self.GamepadIcon:Destroy()
 
     --Disconnect the events.
