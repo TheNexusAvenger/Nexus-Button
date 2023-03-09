@@ -7,7 +7,7 @@
             "NexusButton": {
                 "$path": "."
             },
-            "NexusButtonTests.nexusspec": {
+            "NexusButtonTests.spec": {
                 "$path": "test"
             }
         }
