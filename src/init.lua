@@ -263,6 +263,11 @@ function NexusButton:__new(): ()
             self.MouseButton2Click:Fire()
         end
     end))
+    table.insert(self.Events, UserInputService.InputEnded:Connect(function(Input)
+        if not self.Pressed then return end
+        if Input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+        self.Pressed = false
+    end))
 
     --Set the defaults.
     self.Size = UDim2.new(0, 200, 0, 50)
