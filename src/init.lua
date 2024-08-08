@@ -10,78 +10,115 @@ cross platform buttons.
 local HOVER_COLOR_MULTIPLIER = 0.7
 local PRESS_COLOR_MULTIPLIER = 1 / 0.7
 local CONTROLLER_SECTION_COLOR = Color3.new(50 / 255, 50 / 255, 50 / 255)
-local DEFAULT_THEMES = {
-    CutCorners = {
-        MainButton = {
-            Image = "rbxassetid://9708818802",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-        GamepadIconBackground = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-    },
-    CutTopLeftCorner = {
-        MainButton = {
-            Image = "rbxassetid://9708819815",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-        GamepadIconBackground = {
-            Image = "rbxassetid://9708825225",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-    },
-    CutBottomRightCorner = {
-        MainButton = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-        GamepadIconBackground = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-    },
-    RoundedCorners = {
-        MainButton = {
-            Image = "rbxassetid://9704725601",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-        GamepadIconBackground = {
-            Image = "rbxassetid://9704725809",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
-        },
-    },
-}
-
-
 
 local GuiService = game:GetService("GuiService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local ControllerIcon = require(script:WaitForChild("ControllerIcon"))
+local EditableImageWrapper = require(script:WaitForChild("EditableImageWrapper"))
 local NexusWrappedInstance = require(script:WaitForChild("NexusWrappedInstance"))
 
+local CutCorner9SliceImage = EditableImageWrapper.new()
+    :DrawCutCorner("TopLeft", Vector2.new(0, 0), 256)
+    :DrawRectangle(Vector2.new(256, 0), Vector2.new(256, 256))
+    :DrawRectangle(Vector2.new(0, 256), Vector2.new(256, 256))
+    :DrawCutCorner("BottomRight", Vector2.new(256, 256), 256)
+    :WithName("CutCorner9SliceImage")
+    :GetEditableImage()
+local CutCorner9SliceControllerImage = EditableImageWrapper.new()
+    :DrawRectangle(Vector2.new(0, 0), Vector2.new(256, 512))
+    :DrawRectangle(Vector2.new(256, 0), Vector2.new(256, 256))
+    :DrawCutCorner("BottomRight", Vector2.new(256, 256), 256)
+    :WithName("CutCorner9SliceControllerImage")
+    :GetEditableImage()
+local CutCorner9SliceTopLeftImage = EditableImageWrapper.new()
+    :DrawCutCorner("TopLeft", Vector2.new(0, 0), 256)
+    :DrawRectangle(Vector2.new(256, 0), Vector2.new(256, 512))
+    :DrawRectangle(Vector2.new(0, 256), Vector2.new(256, 256))
+    :WithName("CutCorner9SliceTopLeftImage")
+    :GetEditableImage()
+local CutCorner9SliceNoCornerImage = EditableImageWrapper.new()
+    :DrawRectangle(Vector2.new(0, 0), Vector2.new(512, 512))
+    :WithName("CutCorner9SliceNoCorner")
+    :GetEditableImage()
+local RoundedCorner9SliceImage = EditableImageWrapper.new()
+    :DrawRoundedCorner("TopLeft", Vector2.new(0, 0), 256)
+    :DrawRoundedCorner("TopRight", Vector2.new(256, 0), 256)
+    :DrawRoundedCorner("BottomLeft", Vector2.new(0, 256), 256)
+    :DrawRoundedCorner("BottomRight", Vector2.new(256, 256), 256)
+    :WithName("RoundedCorner9SliceImage")
+    :GetEditableImage()
+local RoundedCorner9SliceControllerImage = EditableImageWrapper.new()
+    :DrawRectangle(Vector2.new(0, 0), Vector2.new(256, 512))
+    :DrawRoundedCorner("TopRight", Vector2.new(256, 0), 256)
+    :DrawRoundedCorner("BottomRight", Vector2.new(256, 256), 256)
+    :WithName("RoundedCorner9SliceControllerImage")
+    :GetEditableImage()
+
 local NexusButton = NexusWrappedInstance:Extend()
-NexusButton.Themes = DEFAULT_THEMES
+NexusButton.Themes = {
+    CutCorners = {
+        MainButton = {
+            EditableImage = CutCorner9SliceImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+        GamepadIconBackground = {
+            EditableImage = CutCorner9SliceControllerImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+    },
+    CutTopLeftCorner = {
+        MainButton = {
+            EditableImage = CutCorner9SliceTopLeftImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+        GamepadIconBackground = {
+            EditableImage = CutCorner9SliceNoCornerImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+    },
+    CutBottomRightCorner = {
+        MainButton = {
+            EditableImage = CutCorner9SliceControllerImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+        GamepadIconBackground = {
+            EditableImage = CutCorner9SliceControllerImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+    },
+    RoundedCorners = {
+        MainButton = {
+            EditableImage = RoundedCorner9SliceImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+        GamepadIconBackground = {
+            EditableImage = RoundedCorner9SliceControllerImage,
+            SliceCenter = Rect.new(250, 250, 262, 262),
+            SliceScaleMultiplier = 0.2 / 250,
+        },
+    },
+}
 NexusButton:SetClassName("NexusButton")
 
 export type NexusButtonTheme = {
     MainButton: {
-        Image: string,
+        Image: string?,
+        EditableImage: EditableImage?,
         SliceCenter: Rect,
         SliceScaleMultiplier: number,
     },
     GamepadIconBackground: {
-        Image: string,
+        Image: string?,
+        EditableImage: EditableImage?,
         SliceCenter: Rect,
         SliceScaleMultiplier: number,
     },
@@ -107,6 +144,24 @@ Multiplies a Color3.
 --]]
 local function MultiplyColor3(Color: Color3, Multiplier: number): Color3
     return Color3.new(math.clamp(Color.R * Multiplier, 0, 1), math.clamp(Color.G * Multiplier, 0, 1), math.clamp(Color.B * Multiplier, 0, 1))
+end
+
+--[[
+Applies an image or editable image to an image frame.
+--]]
+local function ApplyImage(Frame: ImageLabel | ImageButton, ImageId: string, EditableImage: EditableImage?): ()
+    --Clear the existing editable image.
+    local ExistingEditableImage = Frame:FindFirstAncestorOfClass("EditableImage")
+    if ExistingEditableImage then
+        ExistingEditableImage:Destroy()
+    end
+
+    --Apply the image.
+    if ImageId then
+        (Frame :: ImageLabel).Image = ImageId
+    elseif EditableImage then
+        EditableImage:Clone().Parent = Frame
+    end
 end
 
 --[[
@@ -209,11 +264,11 @@ function NexusButton:__new(): ()
         if not Theme then
             error("Unknown theme: "..tostring(NewTheme))
         end
-        BackgroundFrame.Image = Theme.MainButton.Image
+        ApplyImage(BackgroundFrame, Theme.MainButton.Image, Theme.MainButton.EditableImage)
         BackgroundFrame.SliceCenter = Theme.MainButton.SliceCenter
-        BorderFrame.Image = Theme.MainButton.Image
+        ApplyImage(BorderFrame, Theme.MainButton.Image, Theme.MainButton.EditableImage)
         BorderFrame.SliceCenter = Theme.MainButton.SliceCenter
-        GamepadIcon.AdornFrame.Image = Theme.GamepadIconBackground.Image
+        ApplyImage(GamepadIcon.AdornFrame, Theme.GamepadIconBackground.Image, Theme.GamepadIconBackground.EditableImage)
         GamepadIcon.AdornFrame.SliceCenter = Theme.GamepadIconBackground.SliceCenter
         self:UpdateSliceScale()
     end)
