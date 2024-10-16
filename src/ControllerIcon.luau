@@ -1,8 +1,4 @@
---[[
-TheNexusAvenger
-
-Class representing a controller icon.
---]]
+--Class representing a controller icon.
 --!strict
 
 local BASE_ICON_SIZE_RELATIVE = 0.9
@@ -164,20 +160,23 @@ GAMEPAD_ICONS.Default.ButtonR3 = GAMEPAD_ICONS.Xbox.ButtonRS
 
 local UserInputService = game:GetService("UserInputService")
 
-local NexusInstance = require(script.Parent:WaitForChild("NexusWrappedInstance"):WaitForChild("NexusInstance"):WaitForChild("NexusInstance"))
+local NexusInstance = require(script.Parent:WaitForChild("NexusInstance"))
 
-local ControllerIcon = NexusInstance:Extend()
-ControllerIcon:SetClassName("ControllerIcon")
+local ControllerIcon = {}
+ControllerIcon.__index = ControllerIcon
 
 local WarnedPlatformNames = {}
 
 export type ControllerIcon = {
-    new: () -> ControllerIcon,
-    Extend: (self: ControllerIcon) -> ControllerIcon,
-
-    SetIcon: (self: ControllerIcon, KeyCode: Enum.KeyCode | string) -> (),
-    SetScale: (self: ControllerIcon, NewScale: number) -> (),
-} & NexusInstance.NexusInstance
+    AdornFrame: ImageLabel,
+    IconScale: number,
+    Icon: ImageLabel?,
+    IconUIScale: UIScale?,
+    IconVisible: boolean,
+    KeyCode: Enum.KeyCode?,
+    EventConnections: {RBXScriptConnection},
+} & typeof(setmetatable({}, ControllerIcon))
+export type NexusInstanceControllerIcon = NexusInstance.NexusInstance<ControllerIcon>
 
 
 
@@ -217,9 +216,7 @@ end
 --[[
 Constructor of the Controller Icon class.
 --]]
-function ControllerIcon:__new()
-    NexusInstance.__new(self)
-
+function ControllerIcon.__new(self: NexusInstanceControllerIcon)
     --Create the adorn frame.
     local AdornFrame = Instance.new("ImageLabel")
     AdornFrame.BackgroundTransparency = 1
@@ -227,22 +224,23 @@ function ControllerIcon:__new()
     self.IconScale = BASE_ICON_SIZE_RELATIVE
 
     --Connect the events.
-    self.Events = {}
-    table.insert(self.Events, UserInputService.GamepadConnected:Connect(function()
+    self.EventConnections = {}
+    table.insert(self.EventConnections, UserInputService.GamepadConnected:Connect(function()
         self:UpdateVisibility()
     end))
-    table.insert(self.Events, UserInputService.GamepadDisconnected:Connect(function()
+    table.insert(self.EventConnections, UserInputService.GamepadDisconnected:Connect(function()
         self:UpdateVisibility()
     end))
 
     --Update the visibility.
+    self.IconVisible = false
     self:UpdateVisibility()
 end
 
 --[[
 Updates the visibility of the icon.
 --]]
-function ControllerIcon:UpdateVisibility(): ()
+function ControllerIcon.UpdateVisibility(self: NexusInstanceControllerIcon): ()
     --Set the visibility to false if there is no icon.
     if not self.Icon then
         self.AdornFrame.Visible = false
@@ -261,12 +259,14 @@ end
 --[[
 Sets the icon.
 --]]
-function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): ()
+function ControllerIcon.SetIcon(self: NexusInstanceControllerIcon, KeyCode: Enum.KeyCode | string?): ()
     --Return if the KeyCode is nil.
     if KeyCode == nil then
         self.KeyCode = nil
-        self.Icon:Destroy()
-        self.Icon = nil
+        if self.Icon then
+            self.Icon:Destroy()
+            self.Icon = nil
+        end
         self:UpdateVisibility()
         return
     end
@@ -282,7 +282,7 @@ function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): ()
     end
 
     --Create the new icon.
-    local IconData = self.ResolveImage(KeyCode)
+    local IconData = self.ResolveImage(KeyCode :: Enum.KeyCode)
     local Icon = Instance.new("ImageLabel")
     Icon.BackgroundTransparency = 1
     Icon.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -307,14 +307,14 @@ function ControllerIcon:SetIcon(KeyCode: Enum.KeyCode | string): ()
     self.IconUIScale = IconUIScale
 
     self.Icon = Icon
-    self.KeyCode = KeyCode
+    self.KeyCode = KeyCode :: Enum.KeyCode
     self:UpdateVisibility()
 end
 
 --[[
 Sets the scale of the icon.
 --]]
-function ControllerIcon:SetScale(NewScale: number): ()
+function ControllerIcon.SetScale(self: NexusInstanceControllerIcon, NewScale: number): ()
     self.IconScale = NewScale
     if self.IconUIScale then
         self.IconUIScale.Scale = NewScale
@@ -324,14 +324,12 @@ end
 --[[
 Destroys the frame.
 --]]
-function ControllerIcon:Destroy(): ()
-    NexusInstance.Destroy(self)
-
+function ControllerIcon.Destroy(self: NexusInstanceControllerIcon): ()
     --Disconnect the events.
-    for _,Event in self.Events do
-        Event:Disconnect()
+    for _, EventConnection in self.EventConnections do
+        EventConnection:Disconnect()
     end
-    self.Events = {}
+    self.EventConnections = {}
 
     --Destroy the adorn frame.
     self.AdornFrame:Destroy()
@@ -339,4 +337,4 @@ end
 
 
 
-return ControllerIcon :: ControllerIcon
+return NexusInstance.ToInstance(ControllerIcon) :: NexusInstance.NexusInstanceClass<typeof(ControllerIcon), () -> (NexusInstanceControllerIcon)>

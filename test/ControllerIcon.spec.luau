@@ -1,8 +1,4 @@
---[[
-TheNexusAvenger
-
-Tests the ControllerIcon class.
---]]
+--Tests the ControllerIcon class.
 --!strict
 
 local ControllerIcon = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("ControllerIcon"))
@@ -21,11 +17,11 @@ return function()
             expect(TestControllerIcon.Icon).to.equal(nil)
 
             TestControllerIcon:SetIcon(Enum.KeyCode.ButtonA)
-            expect(TestControllerIcon.Icon.Size).to.equal(UDim2.new(1, 0, 1, 0))
-            expect(TestControllerIcon.IconUIScale.Scale).to.be.near(0.9)
+            expect((TestControllerIcon.Icon :: ImageLabel).Size).to.equal(UDim2.new(1, 0, 1, 0))
+            expect((TestControllerIcon.IconUIScale :: UIScale).Scale).to.be.near(0.9)
             TestControllerIcon:SetIcon(Enum.KeyCode.ButtonL1)
-            expect(TestControllerIcon.Icon.Size).to.equal(UDim2.new(1, 0, 64 / 115, 0))
-            expect(TestControllerIcon.IconUIScale.Scale).to.be.near(0.9)
+            expect((TestControllerIcon.Icon :: ImageLabel).Size).to.equal(UDim2.new(1, 0, 64 / 115, 0))
+            expect((TestControllerIcon.IconUIScale :: UIScale).Scale).to.be.near(0.9)
             
             TestControllerIcon:SetIcon(nil)
             expect(TestControllerIcon.Icon).to.equal(nil)
@@ -35,7 +31,7 @@ return function()
             TestControllerIcon:SetIcon(Enum.KeyCode.ButtonA)
 
             TestControllerIcon:SetScale(0.6)
-            expect(TestControllerIcon.IconUIScale.Scale).to.be.near(0.6)
+            expect((TestControllerIcon.IconUIScale :: UIScale).Scale).to.be.near(0.6)
         end)
     end)
 end
