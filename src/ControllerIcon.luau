@@ -161,21 +161,23 @@ GAMEPAD_ICONS.Default.ButtonR3 = GAMEPAD_ICONS.Xbox.ButtonRS
 local UserInputService = game:GetService("UserInputService")
 
 local NexusInstance = require(script.Parent:WaitForChild("NexusInstance"))
+local ThemedFrame = require(script.Parent:WaitForChild("ThemedFrame"))
+local SimpleWrappedInstance = require(script.Parent:WaitForChild("SimpleWrappedInstance"))
 
 local ControllerIcon = {}
 ControllerIcon.__index = ControllerIcon
+setmetatable(ControllerIcon, ThemedFrame)
 
 local WarnedPlatformNames = {}
 
 export type ControllerIcon = {
-    AdornFrame: ImageLabel,
     IconScale: number,
     Icon: ImageLabel?,
     IconUIScale: UIScale?,
     IconVisible: boolean,
     KeyCode: Enum.KeyCode?,
     EventConnections: {RBXScriptConnection},
-} & typeof(setmetatable({}, ControllerIcon))
+} & typeof(setmetatable({}, ControllerIcon)) & ThemedFrame.ThemedFrame
 export type NexusInstanceControllerIcon = NexusInstance.NexusInstance<ControllerIcon>
 
 
@@ -217,13 +219,18 @@ end
 Constructor of the Controller Icon class.
 --]]
 function ControllerIcon.__new(self: NexusInstanceControllerIcon)
-    --Create the adorn frame.
-    local AdornFrame = Instance.new("ImageLabel")
-    AdornFrame.BackgroundTransparency = 1
-    self.AdornFrame = AdornFrame
+    ThemedFrame.__new(self)
+
+    --Prepare the properties.
+    self.SubTheme = "GamepadIconBackground"
+    self:DisableChangeReplication("IconScale")
     self.IconScale = BASE_ICON_SIZE_RELATIVE
+    self:DisableChangeReplication("Icon")
+    self:DisableChangeReplication("IconUIScale")
+    self:DisableChangeReplication("KeyCode")
 
     --Connect the events.
+    self:DisableChangeReplication("EventConnections")
     self.EventConnections = {}
     table.insert(self.EventConnections, UserInputService.GamepadConnected:Connect(function()
         self:UpdateVisibility()
@@ -233,6 +240,7 @@ function ControllerIcon.__new(self: NexusInstanceControllerIcon)
     end))
 
     --Update the visibility.
+    self:DisableChangeReplication("IconVisible")
     self.IconVisible = false
     self:UpdateVisibility()
 end
@@ -243,7 +251,7 @@ Updates the visibility of the icon.
 function ControllerIcon.UpdateVisibility(self: NexusInstanceControllerIcon): ()
     --Set the visibility to false if there is no icon.
     if not self.Icon then
-        self.AdornFrame.Visible = false
+        self.Visible = false
         self.IconVisible = false
         return
     end
@@ -252,7 +260,7 @@ function ControllerIcon.UpdateVisibility(self: NexusInstanceControllerIcon): ()
     local ControllerConnected = (#UserInputService:GetConnectedGamepads() ~= 0)
 
     --Set the visibility.
-    self.AdornFrame.Visible = ControllerConnected
+    self.Visible = ControllerConnected
     self.IconVisible = ControllerConnected
 end
 
@@ -294,12 +302,12 @@ function ControllerIcon.SetIcon(self: NexusInstanceControllerIcon, KeyCode: Enum
     else
         Icon.Size = UDim2.new(1, 0, 1, 0)
     end
-    Icon.ZIndex = self.AdornFrame.ZIndex
+    Icon.ZIndex = self.ZIndex
     Icon.Image = IconData.Image
     Icon.ImageRectSize = IconData.Size
     Icon.ImageRectOffset = IconData.Offset
     Icon.ImageColor3 = IconData.Color or Color3.fromRGB(255, 255, 255)
-    Icon.Parent = self.AdornFrame
+    Icon.Parent = self:GetWrappedInstance()
 
     local IconUIScale = Instance.new("UIScale")
     IconUIScale.Scale = self.IconScale or 1
@@ -325,14 +333,13 @@ end
 Destroys the frame.
 --]]
 function ControllerIcon.Destroy(self: NexusInstanceControllerIcon): ()
+    SimpleWrappedInstance.Destroy(self)
+
     --Disconnect the events.
     for _, EventConnection in self.EventConnections do
         EventConnection:Disconnect()
     end
     self.EventConnections = {}
-
-    --Destroy the adorn frame.
-    self.AdornFrame:Destroy()
 end
 
 
