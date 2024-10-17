@@ -5,9 +5,7 @@ like the ability to make inputs to mouse events and display
 a controller icon when a controller is plugged in.
 
 ## Documentation
-Documentation can be found on the [GitHub pages](https://thenexusavenger.github.io/Nexus-Button)
-for this project. The [docs folder](docs) can also be used since it has all
-of the markdown files.
+Documentation can be found in the [docs folder](docs).
 
 ## Contributing
 Both issues and pull requests are accepted for this project.
@@ -15,4 +13,4 @@ More information can be found [here](docs/contributing.md).
 
 ## License
 Nexus Button is available under the terms of the MIT 
-Licence. See [LICENSE](LICENSE) for details.
+License. See [LICENSE](LICENSE) for details.
