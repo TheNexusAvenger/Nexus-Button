@@ -1,11 +1,6 @@
---[[
-TheNexusAvenger
-
-Tests the NeuxsButton class.
---]]
+--Tests the NeuxsButton class.
 --!strict
 
-_G.EnsureNexusWrappedInstanceSingleton = false
 local NexusButton = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"))
 
 return function()

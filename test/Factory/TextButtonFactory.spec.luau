@@ -1,11 +1,6 @@
---[[
-TheNexusAvenger
-
-Tests the TextButtonFactory class.
---]]
+--Tests the TextButtonFactory class.
 --!strict
 
-_G.EnsureNexusWrappedInstanceSingleton = false
 local TextButtonFactory = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
 
 return function()
@@ -28,15 +23,15 @@ return function()
         end)
 
         it("should be created from a default preset.", function()
-            local TestButtonFactory = TextButtonFactory.CreateDefault(Color3.new(0, 170 / 255, 1))
+            local TestButtonFactory = TextButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
             local Button, TextLabel = TestButtonFactory:Create()
-            expect(Button.BackgroundColor3).to.equal(Color3.new(0, 170 / 255, 1))
-            expect(Button.BorderColor3).to.equal(Color3.new(0, 140 / 255, 225 / 255))
+            expect(Button.BackgroundColor3).to.equal(Color3.fromRGB(0, 170, 255))
+            expect(Button.BorderColor3).to.equal(Color3.fromRGB(0, 140, 225))
             expect(Button.BorderTransparency).to.equal(0.25)
             expect(TextLabel.Font).to.equal(Enum.Font.SourceSans)
-            expect(TextLabel.TextColor3).to.equal(Color3.new(1, 1, 1))
-            expect(TextLabel.TextStrokeColor3).to.equal(Color3.new(0,0,0))
+            expect(TextLabel.TextColor3).to.equal(Color3.fromRGB(255, 255, 255))
+            expect(TextLabel.TextStrokeColor3).to.equal(Color3.fromRGB(0, 0, 0))
             expect(TextLabel.TextStrokeTransparency).to.equal(0)
             expect(TextLabel.TextScaled).to.equal(true)
             Button:Destroy()

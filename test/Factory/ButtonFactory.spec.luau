@@ -1,11 +1,6 @@
---[[
-TheNexusAvenger
-
-Tests the ButtonFactory class.
---]]
+--Tests the ButtonFactory class.
 --!strict
 
-_G.EnsureNexusWrappedInstanceSingleton = false
 local ButtonFactory = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("ButtonFactory"))
 
 return function()
@@ -28,11 +23,11 @@ return function()
         end)
 
         it("should be created from a default preset.", function()
-            local TestButtonFactory = ButtonFactory.CreateDefault(Color3.new(0, 170 / 255, 1))
+            local TestButtonFactory = ButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
             local Button = TestButtonFactory:Create()
-            expect(Button.BackgroundColor3).to.equal(Color3.new(0, 170 / 255, 1))
-            expect(Button.BorderColor3).to.equal(Color3.new(0, 140 / 255, 225 / 255))
+            expect(Button.BackgroundColor3).to.equal(Color3.fromRGB(0, 170, 255))
+            expect(Button.BorderColor3).to.equal(Color3.fromRGB(0, 140, 225))
             expect(Button.BorderTransparency).to.equal(0.25)
             Button:Destroy()
         end)

@@ -4,7 +4,7 @@
 
 local HOVER_COLOR_MULTIPLIER = 0.7
 local PRESS_COLOR_MULTIPLIER = 1 / 0.7
-local CONTROLLER_SECTION_COLOR = Color3.new(50 / 255, 50 / 255, 50 / 255)
+local CONTROLLER_SECTION_COLOR = Color3.fromRGB(50, 50, 50)
 
 local GuiService = game:GetService("GuiService")
 local TweenService = game:GetService("TweenService")
@@ -235,10 +235,10 @@ function NexusButton.__new(self: NexusInstanceNexusButton): ()
 
     --Set the defaults.
     self.Size = UDim2.new(0, 200, 0, 50)
-    self.BackgroundColor3 = Color3.new(0.8, 0.8, 0.8)
+    self.BackgroundColor3 = Color3.fromRGB(204, 204, 204)
     self.BackgroundTransparency = 0
     self.BorderSize = UDim.new(0.15, 0)
-    self.BorderColor3 = Color3.new(0, 0, 0)
+    self.BorderColor3 = Color3.fromRGB(0, 0, 0)
     self.BorderTransparency = 0
     self.AutoButtonColor = true
     self.Hovering = false
