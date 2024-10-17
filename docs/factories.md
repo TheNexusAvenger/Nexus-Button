@@ -22,9 +22,9 @@ local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton")
 local Factory = ButtonFactory.new()
 
 --Set the defaults.
-Factory:SetDefault("Name","CustomName")
-Factory:SetDefault("BackgroundColor3",Color3.new(1,1,1))
-Factory:SetDefault("BorderSizeScale",0.1)
+Factory:SetDefault("Name", "CustomName")
+Factory:SetDefault("BackgroundColor3", Color3.fromRGB(255, 255, 255))
+Factory:SetDefault("BorderSizeScale", 0.1)
 
 --Create a button.
 local Button = Factory:Create()
@@ -48,7 +48,7 @@ the base color as a parameter.
 ```lua
 --Create a button factory.
 local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("ButtonFactory"))
-local Factory = ButtonFactory.CreateDefault(Color3.new(0,170/255,255/255))
+local Factory = ButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Create a button.
 local Button = Factory:Create()
@@ -70,14 +70,14 @@ and `ButtonFactory:UnsetTextDefault(PropertyName)`.
 ```lua
 --Create a button factory.
 local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
-local Factory = TextButtonFactory.CreateDefault(Color3.new(0,170/255,255/255))
+local Factory = TextButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Set the defaults.
-Factory:SetDefault("Name","CustomName")
-Factory:SetDefault("BackgroundColor3",Color3.new(1,1,1))
-Factory:SetDefault("BorderSizeScale",0.1)
-Factory:SetTextDefault("Font","SciFi")
-Factory:SetTextDefault("Text","Button")
+Factory:SetDefault("Name", "CustomName")
+Factory:SetDefault("BackgroundColor3", Color3.fromRGB(255, 255, 255))
+Factory:SetDefault("BorderSizeScale", 0.1)
+Factory:SetTextDefault("Font", "SciFi")
+Factory:SetTextDefault("Text", "Button")
 
 --Create a button.
 local Button,TextLabel = Factory:Create()
@@ -106,7 +106,7 @@ factory used by other projects.
 ```lua
 --Create a button factory.
 local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
-local Factory = TextButtonFactory.CreateDefault(Color3.new(0,170/255,255/255))
+local Factory = TextButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Create a button.
 local Button,TextLabel = Factory:Create()

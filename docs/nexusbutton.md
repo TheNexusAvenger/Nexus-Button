@@ -15,8 +15,8 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 
 --Create a button.
 local Button = NexusButton.new()
-Button.Size = UDim2.new(0,200,0,40)
-Button.Position = UDim2.new(0,50,0,50)
+Button.Size = UDim2.new(0, 200, 0, 40)
+Button.Position = UDim2.new(0, 50, 0, 50)
 Button.Parent = ScreenGui
 ```
 
@@ -41,10 +41,10 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 
 --Create a button.
 local Button = NexusButton.new()
-Button.Size = UDim2.new(0,200,0,40)
-Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
-Button.BorderColor3 = Color3.new(0,140/255,225/255)
+Button.Size = UDim2.new(0, 200, 0, 40)
+Button.Position = UDim2.new(0, 50, 0, 50)
+Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Button.BorderColor3 = Color3.fromRGB(0, 140, 225)
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
 ```
@@ -65,23 +65,23 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 
 --Create a button.
 local Button = NexusButton.new()
-Button.Size = UDim2.new(0,200,0,40)
-Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
-Button.BorderColor3 = Color3.new(0,140/255,225/255)
+Button.Size = UDim2.new(0, 200, 0, 40)
+Button.Position = UDim2.new(0, 50, 0, 50)
+Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Button.BorderColor3 = Color3.fromRGB(0, 140, 225)
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
 
 --Add a text label.
 local TextLabel = Instance.new("TextLabel")
-TextLabel.Size = UDim2.new(1,0,0.9,0)
-TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
-TextLabel.Position = UDim2.new(0.5,0,0.5,0)
+TextLabel.Size = UDim2.new(1, 0, 0.9, 0)
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 TextLabel.BackgroundTransparency = 1
 TextLabel.ZIndex = 5
 TextLabel.Font = Enum.Font.SourceSansBold
-TextLabel.TextColor3 = Color3.new(1,1,1)
-TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel.TextStrokeTransparency = 0
 TextLabel.TextScaled = true
 TextLabel.Text = "Button"
@@ -105,27 +105,27 @@ ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGu
 
 --Create a button.
 local Button = NexusButton.new()
-Button.Size = UDim2.new(0,200,0,40)
-Button.Position = UDim2.new(0,50,0,50)
-Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
-Button.BorderColor3 = Color3.new(0,140/255,225/255)
+Button.Size = UDim2.new(0, 200, 0, 40)
+Button.Position = UDim2.new(0, 50, 0, 50)
+Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+Button.BorderColor3 = Color3.fromRGB(0, 140, 225)
 Button.BorderTransparency = 0.25
 Button.Parent = ScreenGui
 
 --Set up the controller button.
 Button:SetControllerIcon("ButtonA")
-Button:MapKey("ButtonA","MouseButton1")
+Button:MapKey(Enum.KeyCode.ButtonA, Enum.UserInputType.MouseButton1)
 
 --Add a text label.
 local TextLabel = Instance.new("TextLabel")
-TextLabel.Size = UDim2.new(1,0,0.9,0)
-TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
-TextLabel.Position = UDim2.new(0.5,0,0.5,0)
+TextLabel.Size = UDim2.new(1, 0, 0.9, 0)
+TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 TextLabel.BackgroundTransparency = 1
 TextLabel.ZIndex = 5
 TextLabel.Font = Enum.Font.SourceSansBold
-TextLabel.TextColor3 = Color3.new(1,1,1)
-TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel.TextStrokeTransparency = 0
 TextLabel.TextScaled = true
 TextLabel.Text = "Button"
@@ -154,25 +154,25 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
 --Create a button.
-for i, ThemeName in {"CutCorners","CutTopLeftCorner","CutBottomRightCorner","RoundedCorners"} do
+for i, ThemeName in {"CutCorners", "CutTopLeftCorner", "CutBottomRightCorner", "RoundedCorners"} do
     local Button = NexusButton.new()
-    Button.Size = UDim2.new(0,350,0,40)
-    Button.Position = UDim2.new(0,50,0,60 * i)
-    Button.BackgroundColor3 = Color3.new(0,170/255,255/255)
-    Button.BorderColor3 = Color3.new(0,140/255,225/255)
+    Button.Size = UDim2.new(0, 350, 0, 40)
+    Button.Position = UDim2.new(0, 50, 0, 60 * i)
+    Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    Button.BorderColor3 = Color3.fromRGB(0, 140, 225)
     Button.BorderTransparency = 0.25
     Button.Theme = ThemeName
     Button.Parent = ScreenGui
 
     local TextLabel = Instance.new("TextLabel")
-    TextLabel.Size = UDim2.new(1,0,0.9,0)
-    TextLabel.AnchorPoint = Vector2.new(0.5,0.5)
-    TextLabel.Position = UDim2.new(0.5,0,0.5,0)
+    TextLabel.Size = UDim2.new(1, 0, 0.9, 0)
+    TextLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     TextLabel.BackgroundTransparency = 1
     TextLabel.ZIndex = 5
     TextLabel.Font = Enum.Font.SourceSansBold
-    TextLabel.TextColor3 = Color3.new(1,1,1)
-    TextLabel.TextStrokeColor3 = Color3.new(0,0,0)
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     TextLabel.TextStrokeTransparency = 0
     TextLabel.TextScaled = true
     TextLabel.Text = ThemeName
