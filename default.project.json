@@ -4,9 +4,6 @@
         "$path": "src",
         "NexusInstance": {
             "$path": "module/Nexus-Instance/"
-        },
-        "NexusWrappedInstance": {
-            "$path": "module/Nexus-Wrapped-Instance/"
         }
     }
 }

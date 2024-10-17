@@ -6,8 +6,11 @@
             "$className": "ReplicatedStorage",
             "NexusButton": {
                 "$path": "."
-            },
-            "NexusButtonTests.spec": {
+            }
+        },
+        "TestService": {
+            "$className": "TestService",
+            "NexusButton.spec": {
                 "$path": "test"
             }
         }
