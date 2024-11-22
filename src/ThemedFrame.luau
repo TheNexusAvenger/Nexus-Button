@@ -60,6 +60,7 @@ ThemedFrame.Themes = DEFAULT_THEMES
 ThemedFrame.__index = ThemedFrame
 setmetatable(ThemedFrame, SimpleWrappedInstance)
 
+export type SubTheme = "MainButton" | "GamepadIconBackground"
 export type NexusButtonThemeEntry = {
     Image: string,
     SliceCenter: Rect,
@@ -71,7 +72,7 @@ export type NexusButtonTheme = {
 }
 export type ThemedFrame = {
     Theme: string,
-    SubTheme: "MainButton" | "GamepadIconBackground",
+    SubTheme: SubTheme,
     SliceScaleMultiplier: number,
 } & typeof(setmetatable({}, ThemedFrame)) & SimpleWrappedInstance.SimpleWrappedInstance<ImageLabel>
 export type NexusInstanceThemedFrame = NexusInstance.NexusInstance<ThemedFrame>

@@ -4,6 +4,7 @@
 
 local HOVER_COLOR_MULTIPLIER = 0.7
 local PRESS_COLOR_MULTIPLIER = 1 / 0.7
+local CONTROLLER_SECTION_THEME_MINIMUM_ASPECT_RATIO = 1.2
 local CONTROLLER_SECTION_COLOR = Color3.fromRGB(50, 50, 50)
 
 local GuiService = game:GetService("GuiService")
@@ -254,7 +255,8 @@ function NexusButton.UpdateBorder(self: NexusInstanceNexusButton, Tween: boolean
     --Get the border size.
     if not self.BorderSize then return end
     if not self.Theme then return end
-    local ButtonSizeY = self.BackgroundFrame.AbsoluteSize.Y
+    local ButtonSize = self.BackgroundFrame.AbsoluteSize
+    local ButtonSizeY = ButtonSize.Y
     local BorderSize = (ButtonSizeY * self.BorderSize.Scale) + self.BorderSize.Offset
     local BackgroundColor3 = self.BackgroundColor3
     local BorderColor3 = self.BorderColor3
@@ -286,6 +288,7 @@ function NexusButton.UpdateBorder(self: NexusInstanceNexusButton, Tween: boolean
         self.BorderFrame.ImageColor3 = BorderColor3
         self.BorderFrame.Size = UDim2.new(1, 0, 1, BorderSize)
     end
+    self.GamepadIcon.SubTheme = (((ButtonSize.X / ButtonSize.Y) < CONTROLLER_SECTION_THEME_MINIMUM_ASPECT_RATIO) and "MainButton" or "GamepadIconBackground") :: ThemedFrame.SubTheme
 end
 
 --[[
