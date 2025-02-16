@@ -4,50 +4,50 @@
 local DEFAULT_THEMES = {
     CutCorners = {
         MainButton = {
-            Image = "rbxassetid://9708818802",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://76476290918578",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
         GamepadIconBackground = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://135976734207422",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
     },
     CutTopLeftCorner = {
         MainButton = {
-            Image = "rbxassetid://9708819815",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://127204475432575",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
         GamepadIconBackground = {
-            Image = "rbxassetid://9708825225",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://95201075795195",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
     },
     CutBottomRightCorner = {
         MainButton = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://135976734207422",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
         GamepadIconBackground = {
-            Image = "rbxassetid://9708824372",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://135976734207422",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
     },
     RoundedCorners = {
         MainButton = {
-            Image = "rbxassetid://9704725601",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://136205699446611",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
         GamepadIconBackground = {
-            Image = "rbxassetid://9704725809",
-            SliceCenter = Rect.new(500, 500, 524, 524),
-            SliceScaleMultiplier = 0.2 / 500,
+            Image = "rbxassetid://98913835358317",
+            SliceCenter = Rect.new(32, 32, 34, 34),
+            SliceScaleMultiplier = 0.2 / 32,
         },
     },
 } :: {[string]: NexusButtonTheme}
