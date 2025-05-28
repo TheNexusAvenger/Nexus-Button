@@ -3,11 +3,12 @@
 
 local ButtonFactory = require(script:WaitForChild("Factory"):WaitForChild("ButtonFactory"))
 local TextButtonFactory = require(script:WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
+local NexusInstance = require(script:WaitForChild("Packages"):WaitForChild("NexusInstance"))
 local Button = require(script:WaitForChild("Button"))
 local ControllerIcon = require(script:WaitForChild("ControllerIcon"))
 local ThemedFrame = require(script:WaitForChild("ThemedFrame"))
 
-local NexusButton = setmetatable({}, Button)
+local NexusButton = {}
 NexusButton.ButtonFactory = ButtonFactory
 NexusButton.TextButtonFactory = TextButtonFactory
 NexusButton.ControllerIcon = ControllerIcon
@@ -22,4 +23,4 @@ export type NexusInstanceControllerIcon = ControllerIcon.NexusInstanceController
 export type ThemedFrame = ThemedFrame.ThemedFrame
 export type NexusInstanceThemedFrame = ThemedFrame.NexusInstanceThemedFrame
 
-return NexusButton
+return (setmetatable(NexusButton, Button) :: any) :: typeof(NexusButton) & NexusInstance.NexusInstanceClass<typeof(NexusButton), () -> (NexusInstanceNexusButton)>
