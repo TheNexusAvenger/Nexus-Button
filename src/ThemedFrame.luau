@@ -52,7 +52,7 @@ local DEFAULT_THEMES = {
     },
 } :: {[string]: NexusButtonTheme}
 
-local NexusInstance = require(script.Parent:WaitForChild("NexusInstance"))
+local NexusInstance = require(script.Parent:WaitForChild("Packages"):WaitForChild("NexusInstance"))
 local SimpleWrappedInstance = require(script.Parent:WaitForChild("SimpleWrappedInstance"))
 
 local ThemedFrame = {}

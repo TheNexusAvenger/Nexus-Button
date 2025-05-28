@@ -1,7 +1,7 @@
 --Simple instance wrapper for getting and setting instance values.
 --!strict
 
-local NexusInstance = require(script.Parent:WaitForChild("NexusInstance"))
+local NexusInstance = require(script.Parent:WaitForChild("Packages"):WaitForChild("NexusInstance"))
 
 local SimpleWrappedInstance = {}
 SimpleWrappedInstance.__index = SimpleWrappedInstance

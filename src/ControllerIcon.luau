@@ -160,7 +160,7 @@ GAMEPAD_ICONS.Default.ButtonR3 = GAMEPAD_ICONS.Xbox.ButtonRS
 
 local UserInputService = game:GetService("UserInputService")
 
-local NexusInstance = require(script.Parent:WaitForChild("NexusInstance"))
+local NexusInstance = require(script.Parent:WaitForChild("Packages"):WaitForChild("NexusInstance"))
 local ThemedFrame = require(script.Parent:WaitForChild("ThemedFrame"))
 local SimpleWrappedInstance = require(script.Parent:WaitForChild("SimpleWrappedInstance"))
 

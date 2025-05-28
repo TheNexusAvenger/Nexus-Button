@@ -11,7 +11,7 @@ local GuiService = game:GetService("GuiService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
-local NexusInstance = require(script:WaitForChild("NexusInstance"))
+local NexusInstance = require(script:WaitForChild("Packages"):WaitForChild("NexusInstance"))
 local ControllerIcon = require(script:WaitForChild("ControllerIcon"))
 local SimpleWrappedInstance = require(script:WaitForChild("SimpleWrappedInstance"))
 local ThemedFrame = require(script:WaitForChild("ThemedFrame"))
