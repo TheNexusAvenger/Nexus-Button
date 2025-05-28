@@ -18,7 +18,7 @@ buttons.
 
 ```lua
 --Create a button factory.
-local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("ButtonFactory"))
+local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton")).ButtonFactory
 local Factory = ButtonFactory.new()
 
 --Set the defaults.
@@ -47,7 +47,7 @@ a default factory can be used which takes
 the base color as a parameter.
 ```lua
 --Create a button factory.
-local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("ButtonFactory"))
+local ButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton")).ButtonFactory
 local Factory = ButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Create a button.
@@ -69,7 +69,7 @@ and `ButtonFactory:UnsetTextDefault(PropertyName)`.
 
 ```lua
 --Create a button factory.
-local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
+local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton")).TextButtonFactory
 local Factory = TextButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Set the defaults.
@@ -105,7 +105,7 @@ factory used by other projects.
 
 ```lua
 --Create a button factory.
-local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
+local TextButtonFactory = require(game.ReplicatedStorage:WaitForChild("NexusButton")).TextButtonFactory
 local Factory = TextButtonFactory.CreateDefault(Color3.fromRGB(0, 170, 255))
 
 --Create a button.
