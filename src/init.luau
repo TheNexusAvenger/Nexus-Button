@@ -16,7 +16,10 @@ NexusButton.ThemedFrame = ThemedFrame
 export type ButtonFactory = ButtonFactory.ButtonFactory
 export type TextButtonFactory = TextButtonFactory.TextButtonFactory
 export type NexusButton = Button.NexusButton
+export type NexusInstanceNexusButton = Button.NexusInstanceNexusButton
 export type ControllerIcon = ControllerIcon.ControllerIcon
+export type NexusInstanceControllerIcon = ControllerIcon.NexusInstanceControllerIcon
 export type ThemedFrame = ThemedFrame.ThemedFrame
+export type NexusInstanceThemedFrame = ThemedFrame.NexusInstanceThemedFrame
 
 return NexusButton

@@ -4,7 +4,7 @@ repository = "https://github.com/TheNexusAvenger/Nexus-Button"
 description = "Multi-input button for Roblox to simplify UI development."
 license = "MIT"
 authors = ["TheNexusAvenger"]
-version = "2.5.0"
+version = "2.5.1"
 
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
