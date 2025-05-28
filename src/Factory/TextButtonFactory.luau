@@ -3,7 +3,7 @@
 
 local BORDER_COLOR_OFFSET = Color3.fromRGB(-30, -30, -30)
 
-local NexusButton = require(script.Parent.Parent)
+local NexusButton = require(script.Parent.Parent:WaitForChild("Button"))
 local ButtonFactory = require(script.Parent:WaitForChild("ButtonFactory"))
 
 local TextButtonFactory = {}
