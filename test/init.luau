@@ -1,7 +1,9 @@
 --Tests the NeuxsButton class.
 --!strict
 
-local NexusButton = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local NexusButton = require(ReplicatedStorage.Packages.NexusButton)
 
 return function()
     local TextNexusButton = nil

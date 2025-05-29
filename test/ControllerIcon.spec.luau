@@ -1,7 +1,8 @@
 --Tests the ControllerIcon class.
 --!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local ControllerIcon = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("ControllerIcon"))
+local ControllerIcon = require(ReplicatedStorage.Packages.NexusButton.ControllerIcon)
 
 return function()
     local TestControllerIcon = nil

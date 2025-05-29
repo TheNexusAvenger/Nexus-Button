@@ -1,7 +1,9 @@
 --Tests ThemedFrame.
 --!strict
 
-local ThemedFrame = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("ThemedFrame"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local ThemedFrame = require(ReplicatedStorage.Packages.NexusButton.ThemedFrame)
 
 return function()
     describe("A ThemedFrame", function()

@@ -1,7 +1,9 @@
 --Tests SimpleWrappedInstance.
 --!strict
 
-local SimpleWrappedInstance = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("SimpleWrappedInstance"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local SimpleWrappedInstance = require(ReplicatedStorage.Packages.NexusButton.SimpleWrappedInstance)
 
 return function()
     describe("A SimpleWrappedInstance", function()

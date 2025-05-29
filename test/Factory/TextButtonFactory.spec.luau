@@ -1,7 +1,9 @@
 --Tests the TextButtonFactory class.
 --!strict
 
-local TextButtonFactory = require(game:GetService("ReplicatedStorage"):WaitForChild("NexusButton"):WaitForChild("Factory"):WaitForChild("TextButtonFactory"))
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local TextButtonFactory = require(ReplicatedStorage.Packages.NexusButton.Factory.TextButtonFactory)
 
 return function()
     describe("A text button factory", function()
